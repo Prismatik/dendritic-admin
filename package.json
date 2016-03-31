@@ -1,7 +1,7 @@
 {
-  "name": "claytons-admin",
+  "name": "redbeard-admin",
   "version": "1.0.0",
-  "description": "An admin UI for the Claytons API",
+  "description": "An admin UI for Redbeard API",
   "main": "index.js",
   "scripts": {
     "build": "./node_modules/.bin/browserify index.js > dist/js/bundle.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Prismatik/claytons-api"
+    "url": "https://github.com/Prismatik/redbeard-admin"
   },
   "author": "david@banham.id.au",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Prismatik/claytons-api/issues"
+    "url": "https://github.com/Prismatik/redbeard-admin/issues"
   },
-  "homepage": "https://github.com/Prismatik/claytons-api",
+  "homepage": "https://github.com/Prismatik/redbeard-admin",
   "dependencies": {
     "browserify": "^12.0.1",
     "form2js": "^1.0.0",
