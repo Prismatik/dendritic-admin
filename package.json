@@ -4,7 +4,7 @@
   "description": "An admin UI for Redbeard API",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/browserify index.js > dist/js/bundle.js",
+    "build": "./node_modules/.bin/browserify index.js > dist/bundle.js",
     "dev": "./node_modules/.bin/webpack-dev-server --watch --port 3005 --content-base dist index.js",
     "test": "node test"
   },
