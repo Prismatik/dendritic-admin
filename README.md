@@ -24,5 +24,5 @@ This will bundle the project using Browserify into `/dist/bundle.js`.
 npm run dev
 ```
 
-This will start a local webpack server on port `3005` and will watch for any
+This will start a local webpack server at `http://localhost:3005` and will watch for any
 file changes.
