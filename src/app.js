@@ -1,11 +1,11 @@
 const React = require('react');
 const _ = require('lodash');
 const DOM = require('react-dom');
-const config = require('./config');
+const config = require('../config');
 
-const List = React.createFactory(require('./lib/list.js'));
-const Table = React.createFactory(require('./lib/table.js'));
-const Creator = React.createFactory(require('./lib/creator.js'));
+const List = React.createFactory(require('../lib/list.js'));
+const Table = React.createFactory(require('../lib/table.js'));
+const Creator = React.createFactory(require('../lib/creator.js'));
 
 if (!config.apiUrl) {
   if (localStorage.apiUrl) config.apiUrl = localStorage.apiUrl;
