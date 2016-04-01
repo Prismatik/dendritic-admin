@@ -1,72 +1,49 @@
 var webpack = require('webpack');
 
+var context = __dirname + '/src';
+var entry = {
+  javascript: './app.js',
+  html: './index.html'
+};
+var loaders = [
+  {
+    test: /\.js$/,
+    exclude: /node_modules/,
+    loaders: []
+  },
+  {
+    test: /\.css$/,
+    loader: "style-loader!css-loader"
+  },
+  {
+    test: /\.html$/,
+    loader: 'file?name=[name].[ext]',
+  }
+];
+var output = {
+  filename: 'app.js',
+  path: __dirname + '/dist',
+};
+
 var environments = {
   development: {
-    context: __dirname + '/src',
-
-    entry: {
-      javascript: './app.js',
-      html: './index.html',
-    },
-
+    context: context,
+    entry: entry,
     module: {
-      loaders: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loaders: []
-        },
-        {
-          test: /\.css$/,
-          loader: "style-loader!css-loader"
-        },
-        {
-          test: /\.html$/,
-          loader: 'file?name=[name].[ext]',
-        }
-      ]
+      loaders: loaders
     },
-
-    output: {
-      filename: 'app.js',
-      path: __dirname + '/dist',
-    }
+    output: output
   },
-
   production: {
-    context: __dirname + '/src',
-
-    entry: {
-      javascript: './app.js',
-      html: './index.html',
-    },
-
+    context: context,
+    entry: entry,
     module: {
-      loaders: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loaders: []
-        },
-        {
-          test: /\.css$/,
-          loader: "style-loader!css-loader"
-        },
-        {
-          test: /\.html$/,
-          loader: 'file?name=[name].[ext]',
-        }
-      ]
+      loaders: loaders
     },
-
     plugins: [
       new webpack.optimize.UglifyJsPlugin({minimize: true})
     ],
-
-    output: {
-      filename: 'app.js',
-      path: __dirname + '/dist',
-    }
+    output: output
   }
 }
 
