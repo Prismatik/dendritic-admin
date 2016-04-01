@@ -4,7 +4,7 @@
   "description": "An admin UI for Redbeard API",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development webpack-dev-server --port 3005 --content-base dist index.js",
+    "dev": "NODE_ENV=development webpack-dev-server --port 3005",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
