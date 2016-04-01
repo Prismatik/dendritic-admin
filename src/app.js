@@ -2,6 +2,7 @@ const React = require('react');
 const _ = require('lodash');
 const DOM = require('react-dom');
 const config = require('../config');
+const css = require('./css/style.css');
 
 const List = React.createFactory(require('../lib/list.js'));
 const Table = React.createFactory(require('../lib/table.js'));

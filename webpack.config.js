@@ -17,6 +17,10 @@ var environments = {
           loaders: []
         },
         {
+          test: /\.css$/,
+          loader: "style-loader!css-loader"
+        },
+        {
           test: /\.html$/,
           loader: 'file?name=[name].[ext]',
         }
@@ -43,6 +47,10 @@ var environments = {
           test: /\.js$/,
           exclude: /node_modules/,
           loaders: []
+        },
+        {
+          test: /\.css$/,
+          loader: "style-loader!css-loader"
         },
         {
           test: /\.html$/,
