@@ -25,6 +25,7 @@
     "socket.io-client": "^1.4.5"
   },
   "devDependencies": {
+    "file-loader": "^0.8.5",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
   }
