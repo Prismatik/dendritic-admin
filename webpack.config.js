@@ -42,6 +42,7 @@ var environments = {
         {
           test: /\.js$/,
           exclude: /node_modules/,
+          loaders: []
         },
         {
           test: /\.html$/,
