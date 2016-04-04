@@ -46,7 +46,7 @@ module.exports = React.createClass({
       };
 
       const rel = this.state.relationships[col.name];
-      let link;
+      var link;
       if (rel) {
         link = rel.replace('{'+col.name+'}', doc[col.name]);
       }
@@ -100,7 +100,7 @@ module.exports = React.createClass({
     this.setState({socket: socket});
 
     socket.on('record', (data) => {
-      let dataRows = this.state.dataRows;
+      var dataRows = this.state.dataRows;
 
       const cells = this.calcCells(data.new_val, this.state.columns)
         .map(this.wrapCell);
@@ -158,7 +158,7 @@ module.exports = React.createClass({
   },
 
   calcHeaderRow: function(columns) {
-    let breeder = false;
+    var breeder = false;
     const children = columns.map(col => {
       if (!col) return;
       breeder = breeder || col.children;
