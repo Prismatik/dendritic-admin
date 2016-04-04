@@ -30,6 +30,7 @@ var output = {
 
 var environments = {
   development: {
+    devtool: 'eval',
     context: context,
     entry: entry,
     module: {
@@ -38,6 +39,7 @@ var environments = {
     output: output
   },
   production: {
+    devtool: 'cheap-module-source-map',
     context: context,
     entry: entry,
     module: {
