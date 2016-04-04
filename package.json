@@ -26,6 +26,7 @@
     "socket.io-client": "^1.4.5"
   },
   "devDependencies": {
+    "babel-plugin-transform-es2015-arrow-functions": "^6.5.2",
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.5",
     "style-loader": "^0.13.1",
