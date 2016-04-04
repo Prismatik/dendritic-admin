@@ -9,11 +9,14 @@ var loaders = [
   {
     test: /\.js$/,
     exclude: /node_modules/,
-    loaders: []
+    loader: 'babel',
+    query: {
+      plugins: ['transform-es2015-arrow-functions']
+    }
   },
   {
     test: /\.css$/,
-    loader: "style-loader!css-loader"
+    loader: 'style-loader!css-loader'
   },
   {
     test: /\.html$/,
