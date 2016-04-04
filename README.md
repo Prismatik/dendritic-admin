@@ -18,11 +18,11 @@ available:
 npm run build
 ```
 
-This will bundle the project using Browserify into `/dist/bundle.js`.
+This will bundle the project for production usage into `/dist/app.js`.
 
 ```
 npm run dev
 ```
 
-This will start a local webpack server at `http://localhost:3005` and will watch for any
-file changes.
+This will start a local webpack server at `http://localhost:3005` and will
+watch for any file changes.
