@@ -1,6 +1,7 @@
 const React = require('react');
 const _ = require('lodash');
 const DOM = require('react-dom');
+const Listener = require('./components/listener');
 const config = require('../config');
 const css = require('./css/style.css');
 
@@ -32,7 +33,10 @@ const store = {
         apiUrl: localStorage.apiUrl
       };
       DOM.render(Creator(opts), document.getElementById('creator'));
-      DOM.render(Table(opts), document.getElementById('table'));
+
+      const host = localStorage.apiUrl + '/' + pluralName;
+      const ListenerFactory = React.createFactory(Listener(Table, opts));
+      DOM.render(ListenerFactory({host: host}), document.getElementById('table'));
     }
   },
   state: {
