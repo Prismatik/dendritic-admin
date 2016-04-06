@@ -32,7 +32,15 @@ module.exports = function(Component) {
       this.setState({socket: socket});
 
       socket.on(this.props.eventName, data => {
-        this.setState({socketData: this.state.socketData.concat(data)});
+        var socketData = this.state.socketData;
+
+        if (data.old_val) {
+          socketData = _.reject(socketData, item => {
+            return item.new_val.id === data.new_val.id
+          });
+        }
+
+        this.setState({socketData: socketData.concat(data)});
       });
     },
 
