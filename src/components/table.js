@@ -1,6 +1,5 @@
 const React = require('react');
 const DOM = require('react-dom');
-const IO = require('socket.io-client');
 const _ = require('lodash');
 
 const PropTypes = React.PropTypes;
@@ -14,6 +13,12 @@ module.exports = React.createClass({
     name: PropTypes.string.isRequired,
     pluralName: PropTypes.string.isRequired,
     schema: PropTypes.object.isRequired
+  },
+
+  getDefaultProps: function() {
+    return {
+      socketData: []
+    };
   },
 
   getInitialState: function() {
@@ -88,46 +93,6 @@ module.exports = React.createClass({
     return React.DOM.td({key: (cell.data || '')+Math.random()}, contents);
   },
 
-  initSocket: function() {
-    this.setState({dataRows: []});
-
-    if (this.state.socket) {
-      this.state.socket.disconnect();
-    }
-
-    const socket = IO(this.props.apiUrl+'/'+this.props.pluralName);
-
-    this.setState({socket: socket});
-
-    socket.on('record', (data) => {
-      var dataRows = this.state.dataRows;
-
-      const cells = this.calcCells(data.new_val, this.state.columns)
-        .map(this.wrapCell);
-
-      if (data.old_val) {
-        dataRows = _.reject(dataRows, {key: data.new_val.id});
-      };
-
-      dataRows.push(React.DOM.tr({key: data.new_val.id}, cells));
-      this.setState({dataRows: dataRows});
-    });
-  },
-
-  componentWillMount: function() {
-    this.initSocket();
-  },
-
-  componentDidUpdate: function(prevProps) {
-    if (prevProps.name !== this.props.name) {
-      this.initSocket();
-    }
-  },
-
-  componentWillUnmount: function() {
-    this.state.socket.disconnect();
-  },
-
   calcColumns: function(schemaProps) {
     return Object.keys(schemaProps).map(prop => {
       const v = schemaProps[prop];
@@ -177,6 +142,15 @@ module.exports = React.createClass({
     return ret;
   },
 
+  getRows: function() {
+    const columns = this.state.columns;
+
+    return this.props.socketData.map(data => {
+      const cells = this.calcCells(data.new_val, columns).map(this.wrapCell);
+      return React.DOM.tr({key: data.new_val.id}, cells);
+    });
+  },
+
   render: function() {
     return React.DOM.div(
       null,
@@ -186,7 +160,7 @@ module.exports = React.createClass({
         : null, // TODO allow a specifed element or DOM node to be passed in at instantiation
       React.DOM.table({key: 'table'}, [
         this.state.headers,
-        React.DOM.tbody({key: 'tbody'}, this.state.dataRows)
+        React.DOM.tbody({key: 'tbody'}, this.getRows())
       ])
     );
   }
