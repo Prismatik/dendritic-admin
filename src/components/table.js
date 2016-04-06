@@ -79,7 +79,6 @@ module.exports = React.createClass({
 
   wrapCell: function(cell) {
     if (Array.isArray(cell.data)) {
-      //return React.DOM.td({key: 'FIXME'+Math.random()}, 'Array');
       return TableColumn({key: 'FIXME'+Math.random()}, 'Array');
     }
     if (cell.children && Array.isArray(cell.children)) {
