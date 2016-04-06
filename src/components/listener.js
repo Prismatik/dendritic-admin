@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const React = require('react');
 const IO = require('socket.io-client');
+const schemaTransform = require("../lib/transformers/schema");
 
 const PropTypes = React.PropTypes;
 
@@ -10,6 +11,7 @@ module.exports = function(Component) {
 
     propTypes: {
       host: PropTypes.string.isRequired,
+      schema: PropTypes.object.isRequired,
       eventName: PropTypes.string
     },
 
@@ -22,7 +24,7 @@ module.exports = function(Component) {
     getInitialState: function() {
       return {
         socket: null,
-        socketData: []
+        data: []
       };
     },
 
@@ -31,16 +33,17 @@ module.exports = function(Component) {
 
       this.setState({socket: socket});
 
-      socket.on(this.props.eventName, data => {
-        var socketData = this.state.socketData;
+      socket.on(this.props.eventName, res => {
+        let data = this.state.data;
 
-        if (data.old_val) {
-          socketData = _.reject(socketData, item => {
-            return item.new_val.id === data.new_val.id
+        if (res.old_val) {
+          data = _.reject(data, item => {
+            return item.new_val.id === res.new_val.id;
           });
         }
 
-        this.setState({socketData: socketData.concat(data)});
+        const transformed = schemaTransform(this.props.schema, res.new_val);
+        this.setState({data: data.concat(transformed)});
       });
     },
 
@@ -49,7 +52,7 @@ module.exports = function(Component) {
     },
 
     render: function() {
-      const data = {socketData: this.state.socketData};
+      const data = {data: this.state.data};
       return Component(_.extend({}, this.props, data));
     }
   });

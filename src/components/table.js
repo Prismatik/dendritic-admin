@@ -7,6 +7,8 @@ const Model = React.createFactory(require('./model'));
 const TableRow = React.createFactory(require('./table-row'));
 const TableColumn = React.createFactory(require('./table-column'));
 
+const transform = require("../lib/transformers/schema");
+
 module.exports = React.createClass({
   displayName: 'Table',
 
@@ -19,7 +21,7 @@ module.exports = React.createClass({
 
   getDefaultProps: function() {
     return {
-      socketData: []
+      data: []
     };
   },
 
@@ -147,9 +149,9 @@ module.exports = React.createClass({
   getRows: function() {
     const columns = this.state.columns;
 
-    return this.props.socketData.map(data => {
-      const cells = this.calcCells(data.new_val, columns).map(this.wrapCell);
-      return TableRow({key: data.new_val.id, columns: cells});
+    return this.props.data.map(data => {
+      const cells = this.calcCells(data, columns).map(this.wrapCell);
+      return TableRow({key: data.id, columns: cells});
     });
   },
 
