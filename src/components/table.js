@@ -4,6 +4,7 @@ const _ = require('lodash');
 
 const PropTypes = React.PropTypes;
 const Model = React.createFactory(require('./model'));
+const TableRow = React.createFactory(require('./table-row'));
 
 module.exports = React.createClass({
   displayName: 'Table',
