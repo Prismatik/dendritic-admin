@@ -148,7 +148,7 @@ module.exports = React.createClass({
 
     return this.props.socketData.map(data => {
       const cells = this.calcCells(data.new_val, columns).map(this.wrapCell);
-      return React.DOM.tr({key: data.new_val.id}, cells);
+      return TableRow({key: data.new_val.id, columns: cells});
     });
   },
 
