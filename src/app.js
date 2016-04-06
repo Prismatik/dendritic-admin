@@ -35,8 +35,8 @@ const store = {
       DOM.render(Creator(opts), document.getElementById('creator'));
 
       const host = localStorage.apiUrl + '/' + pluralName;
-      const ListenerFactory = React.createFactory(Listener(Table, opts));
-      DOM.render(ListenerFactory({host: host}), document.getElementById('table'));
+      const ListeningTable = React.createFactory(Listener(Table));
+      DOM.render(ListeningTable(_.extend(opts, {host: host})), document.getElementById('table'));
     }
   },
   state: {

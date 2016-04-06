@@ -4,7 +4,7 @@ const IO = require('socket.io-client');
 
 const PropTypes = React.PropTypes;
 
-module.exports = function(Component, props) {
+module.exports = function(Component) {
   return React.createClass({
     displayName: 'Listener',
 
@@ -41,8 +41,8 @@ module.exports = function(Component, props) {
     },
 
     render: function() {
-      const newProps = _.extend({}, props, {socketData: this.state.socketData});
-      return Component(newProps);
+      const data = {socketData: this.state.socketData};
+      return Component(_.extend({}, this.props, data));
     }
   });
 }
