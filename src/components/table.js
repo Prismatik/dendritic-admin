@@ -5,6 +5,7 @@ const _ = require('lodash');
 const PropTypes = React.PropTypes;
 const Model = React.createFactory(require('./model'));
 const TableRow = React.createFactory(require('./table-row'));
+const TableColumn = React.createFactory(require('./table-column'));
 
 module.exports = React.createClass({
   displayName: 'Table',
@@ -78,7 +79,8 @@ module.exports = React.createClass({
 
   wrapCell: function(cell) {
     if (Array.isArray(cell.data)) {
-      return React.DOM.td({key: 'FIXME'+Math.random()}, 'Array');
+      //return React.DOM.td({key: 'FIXME'+Math.random()}, 'Array');
+      return TableColumn({key: 'FIXME'+Math.random()}, 'Array');
     }
     if (cell.children && Array.isArray(cell.children)) {
       return cell.children.map(this.wrapCell);
@@ -91,7 +93,7 @@ module.exports = React.createClass({
       }, cell.data)
       : cell.data;
 
-    return React.DOM.td({key: (cell.data || '')+Math.random()}, contents);
+    return TableColumn({key: (cell.data || '')+Math.random()}, contents);
   },
 
   calcColumns: function(schemaProps) {
