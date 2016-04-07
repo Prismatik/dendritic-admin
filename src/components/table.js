@@ -30,7 +30,6 @@ module.exports = React.createClass({
     const headers = this.calcHeaders(columns);
     const relationships = this.calcRelations(this.props.schema);
     return {
-      dataRows: [],
       headers: headers,
       columns: columns,
       relationships: relationships
