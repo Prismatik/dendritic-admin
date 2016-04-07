@@ -30,7 +30,6 @@ var output = {
 
 var environments = {
   development: {
-    devtool: 'eval',
     context: context,
     entry: entry,
     module: {
