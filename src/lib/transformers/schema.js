@@ -1,4 +1,4 @@
-const _ = require("lodash");
+const _ = require('lodash');
 
 module.exports = function transform(schema, data) {
   const schemaProps = Object.keys(schema.properties);

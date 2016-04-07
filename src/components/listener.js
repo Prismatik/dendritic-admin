@@ -1,8 +1,7 @@
 const _ = require('lodash');
 const React = require('react');
 const IO = require('socket.io-client');
-const schemaTransform = require("../lib/transformers/schema");
-
+const schemaTransform = require('../lib/transformers/schema');
 const PropTypes = React.PropTypes;
 
 module.exports = function(Component) {

@@ -1,12 +1,11 @@
 const React = require('react');
 const _ = require('lodash');
-
 const PropTypes = React.PropTypes;
-const TableRow = React.createFactory(require('./table-row'));
-const TableColumn = React.createFactory(require('./table-column'));
-const TableHeaderColumn = React.createFactory(require('./table-header-column'));
+const factory = React.createFactory;
 
-const transform = require("../lib/transformers/schema");
+const TableRow = factory(require('./table-row'));
+const TableColumn = factory(require('./table-column'));
+const TableHeaderColumn = factory(require('./table-header-column'));
 
 module.exports = React.createClass({
   displayName: 'Table',

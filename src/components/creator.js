@@ -1,6 +1,5 @@
 const React = require('react');
 const form2js = require('form2js').form2js;
-
 const PropTypes = React.PropTypes;
 
 module.exports = React.createClass({
