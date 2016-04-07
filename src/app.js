@@ -2,6 +2,7 @@ const React = require('react');
 const _ = require('lodash');
 const DOM = require('react-dom');
 const Listener = require('./components/listener');
+const extractHeaders = require('./lib/transformers/schema').extractHeaders;
 const config = require('../config');
 const css = require('./css/style.css');
 
@@ -58,7 +59,7 @@ function getTableProps(schema, apiUrl) {
   return {
     schema: schema,
     name: schema.pluralName,
-    headers: Object.keys(schema.properties),
+    headers: extractHeaders(schema.properties),
     host: apiUrl + '/' + schema.pluralName
   };
 }

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Prismatik/redbeard-admin",
   "dependencies": {
+    "dotize": "^0.1.26",
     "form2js": "^1.0.0",
     "lodash": "^4.1.0",
     "react": "^0.14.3",
