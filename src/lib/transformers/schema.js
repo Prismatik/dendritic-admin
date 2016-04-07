@@ -9,7 +9,7 @@ exports.transform = function transform(schema, data) {
     const flatObj = deepToFlat(record);
     const item = schemaProps.map(property => {
       var value = flatObj[property];
-      if (Array.isArray(value)) value = "[" + value.join(', ') + "]";
+      if (Array.isArray(value)) value = arrayToStr(value);
       return [property, value];
     });
     return _.fromPairs(item);
@@ -29,3 +29,5 @@ function extractProps(obj) {
     return result;
   }, {});
 }
+
+function arrayToStr(array) { return "[" + array.join(', ') + "]"; }
