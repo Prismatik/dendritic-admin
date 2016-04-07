@@ -6,6 +6,7 @@ const PropTypes = React.PropTypes;
 const Model = React.createFactory(require('./model'));
 const TableRow = React.createFactory(require('./table-row'));
 const TableColumn = React.createFactory(require('./table-column'));
+const TableHeaderColumn = React.createFactory(require('./table-header-column'));
 
 const transform = require("../lib/transformers/schema");
 
@@ -13,10 +14,9 @@ module.exports = React.createClass({
   displayName: 'Table',
 
   propTypes: {
-    apiUrl: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    pluralName: PropTypes.string.isRequired,
     schema: PropTypes.object.isRequired,
+    headers: PropTypes.array.isRequired,
     data: PropTypes.array
   },
 
@@ -27,13 +27,8 @@ module.exports = React.createClass({
   },
 
   getInitialState: function() {
-    const columns = this.calcColumns(this.props.schema.properties);
-    const headers = this.calcHeaders(columns);
-    const relationships = this.calcRelations(this.props.schema);
     return {
-      headers: headers,
-      columns: columns,
-      relationships: relationships
+      relationships: this.calcRelations(this.props.schema)
     };
   },
 
@@ -47,123 +42,34 @@ module.exports = React.createClass({
     }, {});
   },
 
-  calcCells: function(doc, cols) {
-    return cols.map(col => {
-      if (!doc) return {};
-      if (col.children) return {
-        children: this.calcCells(doc[col.name], col.children)
-      };
-
-      const rel = this.state.relationships[col.name];
-      var link;
-      if (rel) {
-        link = rel.replace('{'+col.name+'}', doc[col.name]);
-      }
-
-      return {
-        data: doc[col.name],
-        link: link
-      };
+  getHeaderRow: function(headers) {
+    const columns = headers.map((header, index) => {
+      return TableHeaderColumn({key: index}, header);
     });
-  },
-
-  clickHandlerFactory: function(id, link) {
-    return e => {
-      this.setState({
-        instance: Model({
-          apiUrl: this.props.apiUrl,
-          link: link,
-          id: id
-        })
-      });
-    };
-  },
-
-  wrapCell: function(cell) {
-    if (Array.isArray(cell.data)) {
-      return TableColumn({key: 'FIXME'+Math.random()}, 'Array');
-    }
-    if (cell.children && Array.isArray(cell.children)) {
-      return cell.children.map(this.wrapCell);
-    }
-
-    const contents = cell.link ?
-      React.DOM.button({
-        href: this.props.apiUrl + cell.link,
-        onClick: this.clickHandlerFactory(cell.data, cell.link)
-      }, cell.data)
-      : cell.data;
-
-    return TableColumn({key: (cell.data || '')+Math.random()}, contents);
-  },
-
-  calcColumns: function(schemaProps) {
-    return Object.keys(schemaProps).map(prop => {
-      const v = schemaProps[prop];
-
-      const col = {
-        name: prop,
-        colSpan: 1
-      }
-
-      if (v.properties) {
-        col.children = this.calcColumns(v.properties);
-        const totalChildren = col.children.reduce((r, col) => {
-          return r += col.colSpan;
-        }, 0);
-        if (col.children.length) {
-          col.colSpan = col.children.length + (totalChildren - col.children.length);
-        } else {
-          col.colSpan = totalChildren;
-        }
-      }
-
-      return col;
-    });
-  },
-
-  calcHeaders: function(columns) {
-    return React.DOM.thead({key: 'thead'}, this.calcHeaderRow(columns));
-  },
-
-  calcHeaderRow: function(columns) {
-    var breeder = false;
-    const children = columns.map(col => {
-      if (!col) return;
-      breeder = breeder || col.children;
-      return col.children;
-    });
-    const ret = [
-      React.DOM.tr({key: 'header'+Math.random()}, columns.map(col => {
-        if (!col) return React.DOM.th({key: Math.random()});
-        return React.DOM.th({
-          key: col.name+Math.random(),
-          colSpan: col.colSpan
-        }, col.name);
-      })),
-    ]
-    if (breeder) ret.push(this.calcHeaderRow(_.flatten(children)));
-    return ret;
+    return TableRow({columns: columns});
   },
 
   getRows: function() {
-    const columns = this.state.columns;
+    const data = this.props.data;
 
-    return this.props.data.map(data => {
-      const cells = this.calcCells(data, columns).map(this.wrapCell);
-      return TableRow({key: data.id, columns: cells});
+    return data.map((row, index) => {
+      const values = _.values(row);
+      const columns = values.map((column, index) => {
+        return TableColumn({key: index}, column);
+      });
+      return TableRow({key: index, columns: columns});
     });
   },
 
   render: function() {
     return React.DOM.div(
       null,
-      React.DOM.h3({key: 'header'}, this.props.pluralName),
+      React.DOM.h3({key: 'header'}, this.props.name),
       this.state.instance ?
         React.DOM.dialog({open: true, key: 'instance', id: 'instance'}, this.state.instance)
         : null, // TODO allow a specifed element or DOM node to be passed in at instantiation
       React.DOM.table({key: 'table'}, [
-        this.state.headers,
+        React.DOM.thead({key: 'thead'}, this.getHeaderRow(this.props.headers)),
         React.DOM.tbody({key: 'tbody'}, this.getRows())
       ])
     );

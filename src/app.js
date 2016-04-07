@@ -24,19 +24,17 @@ const store = {
 
     if (state.selectedModel) {
       const schema = state.schema[state.selectedModel];
-      // FIXME pluralName should come from the schema
-      const pluralName = state.selectedModel + 's';
       const opts = {
         schema: schema,
         name: state.selectedModel,
-        pluralName: pluralName,
+        pluralName: schema.pluralName,
         apiUrl: localStorage.apiUrl
       };
       DOM.render(Creator(opts), document.getElementById('creator'));
 
-      const host = localStorage.apiUrl + '/' + pluralName;
       const ListeningTable = React.createFactory(Listener(Table));
-      DOM.render(ListeningTable(_.extend(opts, {host: host, schema: schema})), document.getElementById('table'));
+      const tableProps = getTableProps(schema, localStorage.apiUrl);
+      DOM.render(ListeningTable(tableProps), document.getElementById('table'));
     }
   },
   state: {
@@ -55,3 +53,12 @@ fetch(config.apiUrl+'/schema')
   const endpoints = Object.keys(json).map(k => {return {name: k};});
   store.dispatch({payload: {schema: json, endpoints: endpoints}});
 });
+
+function getTableProps(schema, apiUrl) {
+  return {
+    schema: schema,
+    name: schema.pluralName,
+    headers: Object.keys(schema.properties),
+    host: apiUrl + '/' + schema.pluralName
+  };
+}
