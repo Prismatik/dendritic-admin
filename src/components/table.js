@@ -16,7 +16,8 @@ module.exports = React.createClass({
     apiUrl: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     pluralName: PropTypes.string.isRequired,
-    schema: PropTypes.object.isRequired
+    schema: PropTypes.object.isRequired,
+    data: PropTypes.array
   },
 
   getDefaultProps: function() {
