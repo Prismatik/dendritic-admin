@@ -29,12 +29,9 @@ module.exports = React.createClass({
     return TableRow({columns: columns});
   },
 
-  getRows: function() {
-    const data = this.props.data;
-
+  getRows: function(data) {
     return data.map((row, index) => {
-      const values = _.values(row);
-      const columns = values.map((column, index) => {
+      const columns = _.values(row).map((column, index) => {
         return TableColumn({key: index}, column);
       });
       return TableRow({key: index, columns: columns});
@@ -47,7 +44,7 @@ module.exports = React.createClass({
       React.DOM.h3({key: 'header'}, this.props.name),
       React.DOM.table({key: 'table'},
         React.DOM.thead({key: 'thead'}, this.getHeaderRow(this.props.headers)),
-        React.DOM.tbody({key: 'tbody'}, this.getRows())
+        React.DOM.tbody({key: 'tbody'}, this.getRows(this.props.data))
       )
     );
   }
