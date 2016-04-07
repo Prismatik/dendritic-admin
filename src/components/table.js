@@ -1,5 +1,4 @@
 const React = require('react');
-const DOM = require('react-dom');
 const _ = require('lodash');
 
 const PropTypes = React.PropTypes;
@@ -44,12 +43,12 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    return DOM.div(
+    return React.DOM.div(
       null,
-      DOM.h3({key: 'header'}, this.props.name),
-      DOM.table({key: 'table'},
-        DOM.thead({key: 'thead'}, this.getHeaderRow(this.props.headers)),
-        DOM.tbody({key: 'tbody'}, this.getRows())
+      React.DOM.h3({key: 'header'}, this.props.name),
+      React.DOM.table({key: 'table'},
+        React.DOM.thead({key: 'thead'}, this.getHeaderRow(this.props.headers)),
+        React.DOM.tbody({key: 'tbody'}, this.getRows())
       )
     );
   }
