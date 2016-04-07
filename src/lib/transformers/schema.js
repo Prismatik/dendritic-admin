@@ -1,14 +1,15 @@
 const _ = require('lodash');
-const Dotize = require('dotize');
+const deepToFlat = require('../object').deepToFlat;
 
 exports.transform = function transform(schema, data) {
   const schemaProps = exports.extractHeaders(schema.properties);
 
   if (!Array.isArray(data)) data = [data];
   return data.map(record => {
-    const dotRecord = Dotize.convert(record);
+    const flatObj = deepToFlat(record);
     const item = schemaProps.map(property => {
-      const value = dotRecord[property];
+      var value = flatObj[property];
+      if (Array.isArray(value)) value = "[" + value.join(', ') + "]";
       return [property, value];
     });
     return _.fromPairs(item);
@@ -17,7 +18,7 @@ exports.transform = function transform(schema, data) {
 
 exports.extractHeaders = function extractHeaders(schemaProps) {
   const rawProps = extractProps(schemaProps);
-  const dotSchema = Dotize.convert(rawProps);
+  const dotSchema = deepToFlat(rawProps);
   return Object.keys(dotSchema);
 };
 
