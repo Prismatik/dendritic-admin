@@ -3,7 +3,6 @@ const DOM = require('react-dom');
 const _ = require('lodash');
 
 const PropTypes = React.PropTypes;
-const Model = React.createFactory(require('./model'));
 const TableRow = React.createFactory(require('./table-row'));
 const TableColumn = React.createFactory(require('./table-column'));
 const TableHeaderColumn = React.createFactory(require('./table-header-column'));
@@ -15,7 +14,6 @@ module.exports = React.createClass({
 
   propTypes: {
     name: PropTypes.string.isRequired,
-    schema: PropTypes.object.isRequired,
     headers: PropTypes.array.isRequired,
     data: PropTypes.array
   },
@@ -46,12 +44,12 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    return React.DOM.div(
+    return DOM.div(
       null,
-      React.DOM.h3({key: 'header'}, this.props.name),
-      React.DOM.table({key: 'table'},
-        React.DOM.thead({key: 'thead'}, this.getHeaderRow(this.props.headers)),
-        React.DOM.tbody({key: 'tbody'}, this.getRows())
+      DOM.h3({key: 'header'}, this.props.name),
+      DOM.table({key: 'table'},
+        DOM.thead({key: 'thead'}, this.getHeaderRow(this.props.headers)),
+        DOM.tbody({key: 'tbody'}, this.getRows())
       )
     );
   }
