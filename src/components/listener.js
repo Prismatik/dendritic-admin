@@ -33,7 +33,7 @@ module.exports = function(Component) {
       this.setState({socket: socket});
 
       socket.on(this.props.eventName, res => {
-        let data = this.state.data;
+        var data = this.state.data;
 
         if (res.old_val) {
           data = _.reject(data, item => {
