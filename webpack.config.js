@@ -9,10 +9,7 @@ var loaders = [
   {
     test: /\.js$/,
     exclude: /node_modules/,
-    loaders: ['react-hot', 'babel'],
-    query: {
-      plugins: ['transform-es2015-arrow-functions']
-    }
+    loaders: ['react-hot', 'babel']
   },
   {
     test: /\.css$/,
