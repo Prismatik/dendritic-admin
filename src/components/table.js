@@ -24,11 +24,6 @@ export default class Table extends Component {
   getRows(data) {
     return data.map((row, index) => {
       const columns = values(row).map((column, index) => {
-
-        // TODO: This is a flimsy way of checking for a link.  Make this more
-        // robust.
-        // @nwinch 08/04/16
-        if (column.match(/^\//)) column = DOM.a({href: column}, column);
         return TableColumn({ key: index }, column);
       });
 
