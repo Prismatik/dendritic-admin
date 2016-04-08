@@ -1,8 +1,7 @@
-const _ = require('lodash');
-const React = require('react');
-const IO = require('socket.io-client');
-const schemaTransform = require('../lib/transformers/schema').transform;
-const PropTypes = React.PropTypes;
+import { extend, reject } from 'lodash';
+import React, { Component, PropTypes } from 'react';
+import IO from 'socket.io-client';
+import { transform } from '../lib/transformers/schema';
 
 module.exports = function(Component) {
   return React.createClass({
@@ -36,12 +35,12 @@ module.exports = function(Component) {
         var data = this.state.data;
 
         if (res.old_val) {
-          data = _.reject(data, item => {
+          data = reject(data, item => {
             return item.new_val.id === res.new_val.id;
           });
         }
 
-        const transformed = schemaTransform(this.props.schema, res.new_val);
+        const transformed = transform(this.props.schema, res.new_val);
         this.setState({data: data.concat(transformed)});
       });
     },
@@ -52,7 +51,7 @@ module.exports = function(Component) {
 
     render: function() {
       const data = {data: this.state.data};
-      return Component(_.extend({}, this.props, data));
+      return Component(extend({}, this.props, data));
     }
   });
 }

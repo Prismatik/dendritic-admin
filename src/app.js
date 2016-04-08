@@ -1,13 +1,15 @@
 const React = require('react');
 const _ = require('lodash');
 const DOM = require('react-dom');
-const Listener = require('./components/listener');
 const extractHeaders = require('./lib/transformers/schema').extractHeaders;
 const config = require('../config');
 const css = require('./css/style.css');
 
+import listener from './components/listener';
+import table from './components/table';
+
 const List = React.createFactory(require('./components/list.js'));
-const Table = React.createFactory(require('./components/table.js'));
+const Table = React.createFactory(table);
 const Creator = React.createFactory(require('./components/creator.js'));
 
 if (!config.apiUrl) {
@@ -33,7 +35,7 @@ const store = {
       };
       DOM.render(Creator(opts), document.getElementById('creator'));
 
-      const ListeningTable = React.createFactory(Listener(Table));
+      const ListeningTable = React.createFactory(listener(Table));
       const tableProps = getTableProps(schema, localStorage.apiUrl);
       DOM.render(ListeningTable(tableProps), document.getElementById('table'));
     }

@@ -1,0 +1,11 @@
+import React, { DOM, PropTypes } from 'react';
+
+const TableRow = ({ key, columns }) => {
+  return DOM.tr({ key }, columns)
+};
+
+TableRow.propTypes = {
+  columns: PropTypes.arrayOf(PropTypes.element).isRequired
+};
+
+export default TableRow;
