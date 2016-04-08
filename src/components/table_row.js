@@ -1,6 +1,6 @@
 import React, { DOM, PropTypes } from 'react';
 
-const TableRow = ({ key, columns }) => {
+const TableRow = ({ key = 0, columns }) => {
   return DOM.tr({ key }, columns)
 };
 
