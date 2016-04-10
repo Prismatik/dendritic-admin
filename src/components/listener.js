@@ -1,56 +1,54 @@
-const _ = require('lodash');
-const React = require('react');
-const IO = require('socket.io-client');
+import { reject } from 'lodash';
+import React, { Component, PropTypes } from 'react';
+import IO from 'socket.io-client';
+import { transform } from '../lib/transformers/schema';
 
-const PropTypes = React.PropTypes;
+export default ComposedComponent => {
+  class Listener extends Component {
+    constructor(props) {
+      super(props);
 
-module.exports = function(Component) {
-  return React.createClass({
-    displayName: 'Listener',
-
-    propTypes: {
-      host: PropTypes.string.isRequired,
-      eventName: PropTypes.string
-    },
-
-    getDefaultProps: function() {
-      return {
-        eventName: 'record'
-      };
-    },
-
-    getInitialState: function() {
-      return {
+      this.state = {
         socket: null,
-        socketData: []
+        data: []
       };
-    },
+    }
 
-    componentWillMount: function() {
-      const socket = IO(this.props.host);
+    componentWillMount() {
+      const { host, schema, eventName } = this.props;
+      const socket = IO(host);
 
-      this.setState({socket: socket});
+      this.setState({ socket });
 
-      socket.on(this.props.eventName, data => {
-        var socketData = this.state.socketData;
+      socket.on(eventName, res => {
+        let data = this.state.data
 
-        if (data.old_val) {
-          socketData = _.reject(socketData, item => {
-            return item.new_val.id === data.new_val.id
-          });
+        if (res.old_val) {
+          data = reject(data, item => item.new_val.id === res.new_val.id);
         }
 
-        this.setState({socketData: socketData.concat(data)});
+        this.setState({ data: data.concat(transform(schema, res.new_val)) });
       });
-    },
-
-    componentWillUnmount: function() {
-      this.state.socket.disconnect();
-    },
-
-    render: function() {
-      const data = {socketData: this.state.socketData};
-      return Component(_.extend({}, this.props, data));
     }
-  });
+
+    componentWillUnmount() {
+      this.state.socket.disconnect();
+    }
+
+    render() {
+      return ComposedComponent({ ...this.props, data: this.state.data });
+    }
+  };
+
+  Listener.propTypes = {
+    host: PropTypes.string.isRequired,
+    schema: PropTypes.object.isRequired,
+    eventName: PropTypes.string
+  };
+
+  Listener.defaultProps = {
+    eventName: 'record'
+  }
+
+  return Listener;
 }

@@ -1,13 +1,17 @@
 const React = require('react');
 const _ = require('lodash');
 const DOM = require('react-dom');
-const Listener = require('./components/listener');
+const extractHeaders = require('./lib/transformers/schema').extractHeaders;
 const config = require('../config');
 const css = require('./css/style.css');
 
+import listener from './components/listener';
+import table from './components/table';
+
 const List = React.createFactory(require('./components/list.js'));
-const Table = React.createFactory(require('./components/table.js'));
+const Table = React.createFactory(table);
 const Creator = React.createFactory(require('./components/creator.js'));
+const ListeningTable = React.createFactory(listener(Table));
 
 if (!config.apiUrl) {
   if (localStorage.apiUrl) config.apiUrl = localStorage.apiUrl;
@@ -24,19 +28,16 @@ const store = {
 
     if (state.selectedModel) {
       const schema = state.schema[state.selectedModel];
-      // FIXME pluralName should come from the schema
-      const pluralName = state.selectedModel + 's';
       const opts = {
         schema: schema,
         name: state.selectedModel,
-        pluralName: pluralName,
+        pluralName: schema.pluralName,
         apiUrl: localStorage.apiUrl
       };
       DOM.render(Creator(opts), document.getElementById('creator'));
 
-      const host = localStorage.apiUrl + '/' + pluralName;
-      const ListeningTable = React.createFactory(Listener(Table));
-      DOM.render(ListeningTable(_.extend(opts, {host: host})), document.getElementById('table'));
+      const tableProps = getTableProps(schema, localStorage.apiUrl);
+      DOM.render(ListeningTable(tableProps), document.getElementById('table'));
     }
   },
   state: {
@@ -55,3 +56,12 @@ fetch(config.apiUrl+'/schema')
   const endpoints = Object.keys(json).map(k => {return {name: k};});
   store.dispatch({payload: {schema: json, endpoints: endpoints}});
 });
+
+function getTableProps(schema, apiUrl) {
+  return {
+    schema: schema,
+    name: schema.pluralName,
+    headers: extractHeaders(schema.properties),
+    host: apiUrl + '/' + schema.pluralName
+  };
+}

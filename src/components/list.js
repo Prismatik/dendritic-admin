@@ -1,5 +1,4 @@
 const React = require('react');
-
 const PropTypes = React.PropTypes;
 
 module.exports = React.createClass({
