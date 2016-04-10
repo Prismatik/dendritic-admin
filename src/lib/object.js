@@ -1,12 +1,12 @@
 exports.deepToFlat = function deepToFlat(obj) {
-  var recurse, res;
+  let recurse, res;
   res = {};
   recurse = function(obj, current) {
-    var key, newKey, results, value;
+    let key, newKey, results, value;
     results = [];
     for (key in obj) {
       value = obj[key];
-      newKey = (current ? current + "." + key : key);
+      newKey = (current ? current + '.' + key : key);
       if (value && _.isPlainObject(value)) {
         results.push(recurse(value, newKey));
       } else {
@@ -17,4 +17,4 @@ exports.deepToFlat = function deepToFlat(obj) {
   };
   recurse(obj);
   return res;
-}
+};
