@@ -32,7 +32,10 @@ var environments = {
     module: {
       loaders: loaders
     },
-    output: output
+    output: output,
+    devServer: {
+      port: 3005
+    }
   },
   production: {
     devtool: 'cheap-module-source-map',
@@ -51,6 +54,6 @@ var environments = {
     ],
     output: output
   }
-}
+};
 
 module.exports = environments[process.env.NODE_ENV] || environments.development;
