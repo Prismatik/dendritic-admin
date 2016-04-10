@@ -15,13 +15,11 @@ export function transform(schema, data) {
     });
     return _.fromPairs(item);
   });
-};
+}
 
 export function extractHeaders(schemaProps) {
-  const rawProps = extractProps(schemaProps);
-  const dotSchema = deepToFlat(rawProps);
-  return Object.keys(dotSchema);
-};
+  return _.flowRight(Object.keys, deepToFlat, extractProps)(schemaProps);
+}
 
 function extractProps(obj) {
   return _.reduce(obj, (result, value, key) => {
