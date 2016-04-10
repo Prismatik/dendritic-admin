@@ -10,5 +10,5 @@ export default function TableColumn({ key = 0, children }) {
     children = DOM.a({ href: children }, children);
   }
 
-  return DOM.td({ key }, children)
+  return DOM.td({ key }, children);
 };

@@ -26,12 +26,12 @@ module.exports = React.createClass({
     const linkArr = this.props.link.split('/');
     const path = linkArr.slice(0, -1).join('/');
 
-    const socket = IO(this.props.apiUrl+'/'+path, {query: {id: this.props.id}});
+    const socket = IO(this.props.apiUrl+'/'+path, { query: { id: this.props.id }});
 
-    this.setState({socket: socket});
+    this.setState({ socket: socket });
 
     socket.on('record', (data) => {
-      this.setState({model: data.new_val});
+      this.setState({ model: data.new_val });
     });
   },
 

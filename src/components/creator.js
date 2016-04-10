@@ -13,7 +13,7 @@ module.exports = React.createClass({
   },
 
   getInitialState: function() {
-    return {createButtonText: 'Create'};
+    return { createButtonText: 'Create' };
   },
 
   calculateInputs: function(properties, lineage, required) {
@@ -30,7 +30,7 @@ module.exports = React.createClass({
         return r;
       }
 
-      r.push(React.DOM.label({key: prop+'label'}, prop));
+      r.push(React.DOM.label({ key: prop+'label' }, prop));
 
       const numberish = (property.type === 'number' || property.type === 'integer');
       const type = numberish ? 'number' : 'text';
@@ -46,8 +46,8 @@ module.exports = React.createClass({
       return r;
     }, []);
     return React.DOM.fieldset(
-      {key: key+'fieldset'},
-      React.DOM.legend({key: key+'legend'}, key),
+      { key: key+'fieldset' },
+      React.DOM.legend({ key: key+'legend' }, key),
       inputs
     );
   },
@@ -67,7 +67,7 @@ module.exports = React.createClass({
     if (node.nodeName === 'INPUT' && node.type === 'number') {
       const val = parseInt(node.value);
       if (!val) return false;
-      return { name: node.name, value: val }
+      return { name: node.name, value: val };
     };
     return false;
   },
@@ -82,7 +82,7 @@ module.exports = React.createClass({
   toggleCreationForm: function() {
     const visState = this.state.creationFormVisible;
     const createButtonText = visState ? 'Create' : 'Hide';
-    this.setState({creationFormVisible: !visState, createButtonText: createButtonText});
+    this.setState({ creationFormVisible: !visState, createButtonText: createButtonText });
   },
 
   render: function() {
@@ -94,13 +94,13 @@ module.exports = React.createClass({
         onSubmit: this.submissionHandler
       },
       fieldsets,
-      React.DOM.input({type: 'submit', key: this.props.name+'submit', text: 'Submit'})
+      React.DOM.input({ type: 'submit', key: this.props.name+'submit', text: 'Submit' })
     ) : null;
 
     return React.DOM.div(
-      {key: this.props.name+'creatorContainer'},
+      { key: this.props.name+'creatorContainer' },
       form,
-      React.DOM.button({onClick: this.toggleCreationForm, key: 'create'}, this.state.createButtonText)
+      React.DOM.button({ onClick: this.toggleCreationForm, key: 'create' }, this.state.createButtonText)
     );
   }
 });
