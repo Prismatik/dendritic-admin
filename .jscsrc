@@ -2,5 +2,6 @@
   "disallowTabs": true,
   "requireSemicolons": true,
   "validateQuoteMarks": { "mark": "'", "escape": true },
-  "requireSpacesInsideObjectBrackets": "allButNested"
+  "requireSpacesInsideObjectBrackets": "allButNested",
+  "disallowVar": true
 }
