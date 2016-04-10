@@ -11,6 +11,7 @@ import table from './components/table';
 const List = React.createFactory(require('./components/list.js'));
 const Table = React.createFactory(table);
 const Creator = React.createFactory(require('./components/creator.js'));
+const ListeningTable = React.createFactory(listener(Table));
 
 if (!config.apiUrl) {
   if (localStorage.apiUrl) config.apiUrl = localStorage.apiUrl;
@@ -35,7 +36,6 @@ const store = {
       };
       DOM.render(Creator(opts), document.getElementById('creator'));
 
-      const ListeningTable = React.createFactory(listener(Table));
       const tableProps = getTableProps(schema, localStorage.apiUrl);
       DOM.render(ListeningTable(tableProps), document.getElementById('table'));
     }
