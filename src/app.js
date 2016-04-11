@@ -24,7 +24,7 @@ const store = {
     store.state = _.merge(store.state, action.payload);
     const state = store.state;
     console.log('state is', state);
-    DOM.render(List({store: store}), document.getElementById('list'));
+    DOM.render(List({ store: store }), document.getElementById('list'));
 
     if (state.selectedModel) {
       const schema = state.schema[state.selectedModel];
@@ -53,8 +53,8 @@ store.dispatch({});
 fetch(config.apiUrl+'/schema')
 .then(res => res.json())
 .then(json => {
-  const endpoints = Object.keys(json).map(k => {return {name: k};});
-  store.dispatch({payload: {schema: json, endpoints: endpoints}});
+  const endpoints = Object.keys(json).map(k => { return { name: k };});
+  store.dispatch({ payload: { schema: json, endpoints: endpoints }});
 });
 
 function getTableProps(schema, apiUrl) {

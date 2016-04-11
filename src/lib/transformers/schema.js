@@ -29,7 +29,7 @@ function extractProps(obj) {
   }, {});
 }
 
-function arrayToStr(array) { return "[" + array.join(', ') + "]"; }
+function arrayToStr(array) { return '[' + array.join(', ') + ']'; }
 
 function valueToLink(links, prop, value) {
   const index = _.map(links, 'rel').indexOf(prop);

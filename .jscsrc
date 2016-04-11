@@ -1,4 +1,8 @@
 {
+  "esnext": true,
   "disallowTabs": true,
-  "requireSemicolons": true
+  "requireSemicolons": true,
+  "validateQuoteMarks": { "mark": "'", "escape": true },
+  "requireSpacesInsideObjectBrackets": "allButNested",
+  "disallowVar": true
 }

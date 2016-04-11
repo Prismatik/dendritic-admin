@@ -21,7 +21,7 @@ export default ComposedComponent => {
       this.setState({ socket });
 
       socket.on(eventName, res => {
-        let data = this.state.data
+        let data = this.state.data;
 
         if (res.old_val) {
           data = reject(data, item => item.new_val.id === res.new_val.id);
