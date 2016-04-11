@@ -1,4 +1,5 @@
 {
+  "esnext": true,
   "disallowTabs": true,
   "requireSemicolons": true,
   "validateQuoteMarks": { "mark": "'", "escape": true },
