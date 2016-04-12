@@ -21,9 +21,9 @@ export default class Main extends Component {
     const { schema, selectedModel } = store.state;
     const show = schema && selectedModel;
 
-    return DOM.div({ className: "container row" },
-      DOM.div({ className: "col s2" }, List({ store })),
-      DOM.div({ className: "col" },
+    return DOM.div({ className: 'container row' },
+      DOM.div({ className: 'col s2' }, List({ store })),
+      DOM.div({ className: 'col' },
         show
           ? DOM.div(null, Creator({
                 schema: schema[selectedModel],
@@ -40,7 +40,7 @@ export default class Main extends Component {
             )
           : null
       )
-    )
+    );
   }
 };
 
