@@ -1,3 +1,5 @@
+import { isPlainObject } from 'lodash';
+
 exports.deepToFlat = function deepToFlat(obj) {
   let recurse, res;
   res = {};
@@ -7,7 +9,7 @@ exports.deepToFlat = function deepToFlat(obj) {
     for (key in obj) {
       value = obj[key];
       newKey = (current ? current + '.' + key : key);
-      if (value && _.isPlainObject(value)) {
+      if (value && isPlainObject(value)) {
         results.push(recurse(value, newKey));
       } else {
         results.push(res[newKey] = value);
