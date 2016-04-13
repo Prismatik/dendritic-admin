@@ -37,9 +37,7 @@ export class Main extends Component {
           items: Object.keys(collections),
           itemOnClick: (e, item) => {
             e.preventDefault();
-
-            const found = find(schema, i => i.pluralName == item);
-            navActions.setNavActive(found.name);
+            navActions.setNavActive(item);
           }
         })
       ),
@@ -48,14 +46,14 @@ export class Main extends Component {
           ? DOM.div(null,
               Creator({
                 schema: activeSchema,
-                name: active,
+                name: activeSchema.name,
                 apiUrl: url,
                 pluralName: activeSchema.pluralName
               }),
               Table({
                 name: activeSchema.pluralName,
                 headers: extractHeaders(activeSchema.properties),
-                data: toArray(collections[activeSchema.pluralName])
+                data: toArray(collections[activeSchema.name])
               })
             )
           : null
@@ -86,13 +84,13 @@ const Resolved = resolve('init', ({ api, dispatch }) => {
     .then(res => res.json())
     .then(json => {
       dispatch(getApiSuccess(json));
-      dispatch(getCollectionsSuccess(map(json, 'pluralName')));
+      dispatch(getCollectionsSuccess(Object.keys(json)));
     });
 });
 
 const SocketListener = listener(({ api, collections, dispatch }) => {
   return Object.keys(collections).map(collection => ({
-    host: api.url + '/' + collection,
+    host: api.url + '/' + api.schema[collection].pluralName,
     event: 'record',
     handler: data => {
 
