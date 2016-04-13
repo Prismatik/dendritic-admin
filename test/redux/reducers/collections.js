@@ -1,5 +1,8 @@
+import { cloneDeep } from 'lodash';
 import { collections } from 'root/src/redux/reducers/collections';
-import ValidApiSchema from 'root/test/valid_api_schema.json';
+import schema from 'root/test/valid_api_schema.json';
+
+const ValidApiSchema = cloneDeep(schema);
 
 describe('./redux/reducers/collection', function() {
   beforeEach(function() {
