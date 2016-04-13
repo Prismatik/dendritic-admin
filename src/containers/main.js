@@ -10,7 +10,8 @@ import table from '../components/table';
 import { getApiSuccess } from '../redux/actions/api';
 import {
   getCollectionsSuccess,
-  updateCollection
+  addToCollection,
+  removeFromCollection
 } from '../redux/actions/collections';
 import * as navActions from '../redux/actions/nav';
 import { extractHeaders } from '../lib/transformers/schema';
@@ -94,7 +95,20 @@ const SocketListener = listener(({ api, collections, dispatch }) => {
     host: api.url + '/' + collection,
     event: 'record',
     handler: data => {
-      dispatch(updateCollection({ collection, item: data.new_val }));
+
+      // If API returns an old version, remove it before the new one is added.
+      if (data.old_val) {
+        dispatch(removeFromCollection({
+          item: data.new_val,
+          collection
+        }));
+      }
+
+      dispatch(addToCollection({
+        schema: api.schema[collection],
+        item: data.new_val,
+        collection
+      }));
     }
   }));
 });
