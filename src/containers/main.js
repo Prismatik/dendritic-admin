@@ -23,7 +23,7 @@ export class Main extends Component {
     } = this.props;
 
     return DOM.div(null,
-      Header(null, 'Redbeard Admin'),
+      Header(),
       DOM.main(null,
         DOM.div({ className: 'row' },
           DOM.div({ className: 'container' },
