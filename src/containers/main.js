@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { resolve } from 'react-resolver';
 import { bindActionCreators } from 'redux';
 import creator from '../components/creator';
+import header from '../components/header';
 import nav from '../components/nav';
 import listener from '../components/socket_listener';
 import table from '../components/table';
@@ -17,6 +18,7 @@ import * as navActions from '../redux/actions/nav';
 import { extractHeaders } from '../lib/transformers/schema';
 
 const Creator = createFactory(creator);
+const Header = createFactory(header);
 const Nav = createFactory(nav);
 const Table = createFactory(table);
 
@@ -31,32 +33,39 @@ export class Main extends Component {
 
     const activeSchema = schema[active];
 
-    return DOM.div({ className: 'container row' },
-      DOM.div({ className: 'col s2' },
-        Nav({
-          items: Object.keys(collections),
-          itemOnClick: (e, item) => {
-            e.preventDefault();
-            navActions.setNavActive(item);
-          }
-        })
-      ),
-      DOM.div({ className: 'col s8' },
-        activeSchema
-          ? DOM.div(null,
-              Creator({
-                schema: activeSchema,
-                name: activeSchema.name,
-                apiUrl: url,
-                pluralName: activeSchema.pluralName
-              }),
-              Table({
-                name: activeSchema.pluralName,
-                headers: extractHeaders(activeSchema.properties),
-                data: toArray(collections[activeSchema.name])
+    return DOM.div(null,
+      Header(null, 'Redbeard Admin'),
+      DOM.main(null,
+        DOM.div({ className: 'row' },
+          DOM.div({ className: 'container' },
+            DOM.div({ className: 'col s12 l2' },
+              Nav({
+                items: Object.keys(collections),
+                itemOnClick: (e, item) => {
+                  e.preventDefault();
+                  navActions.setNavActive(item);
+                }
               })
+            ),
+            DOM.div({ className: 'col s12 l10' },
+              activeSchema
+                ? DOM.div({ className: 'section' },
+                    Creator({
+                      schema: activeSchema,
+                      name: activeSchema.name,
+                      apiUrl: url,
+                      pluralName: activeSchema.pluralName
+                    }),
+                    Table({
+                      name: activeSchema.pluralName,
+                      headers: extractHeaders(activeSchema.properties),
+                      data: toArray(collections[activeSchema.name])
+                    })
+                  )
+                : null
             )
-          : null
+          )
+        )
       )
     );
   }

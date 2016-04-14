@@ -36,7 +36,7 @@ export default class Table extends Component {
 
     return DOM.div(null,
       DOM.h3(null, name),
-      DOM.table(null,
+      DOM.table({ className: 'highlight' },
         DOM.thead(null, this.getHeaderRow(headers)),
         DOM.tbody(null, this.getRows(data))
       )
