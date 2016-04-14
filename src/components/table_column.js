@@ -1,5 +1,8 @@
 import { isString } from 'lodash';
-import React, { DOM } from 'react';
+import React, { createFactory, DOM } from 'react';
+import action from './action';
+
+const Action = createFactory(action);
 
 export default function TableColumn({ key = 0, children }) {
 
@@ -7,9 +10,9 @@ export default function TableColumn({ key = 0, children }) {
   // robust.
   // @nwinch 08/04/16
   if (isString(children) && children.match(/^\//)) {
-    children = DOM.a({
+    children = Action({
       className: 'red-text text-accent-4',
-      href: children
+      path: `/collections${children}`,
     }, children);
   }
 
