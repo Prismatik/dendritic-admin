@@ -11,6 +11,7 @@ export default class Nav extends Component {
       items.map((item, key) => {
         return ListItem({ key },
           DOM.a({
+            className: 'red-text text-accent-4 flow-text',
             href: '#',
             onClick: e => itemOnClick(e, item)
           }, item)

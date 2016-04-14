@@ -1,6 +1,8 @@
-const React = require('react');
-const form2js = require('form2js').form2js;
-const PropTypes = React.PropTypes;
+import { form2js } from 'form2js';
+import React, { createFactory, PropTypes } from 'react';
+import formInput from './form_input';
+
+const FormInput = createFactory(formInput);
 
 module.exports = React.createClass({
   displayName: 'Creator',
@@ -30,14 +32,13 @@ module.exports = React.createClass({
         return r;
       }
 
-      r.push(React.DOM.label({ key: prop+'label' }, prop));
-
       const numberish = (property.type === 'number' || property.type === 'integer');
       const type = numberish ? 'number' : 'text';
       const isRequired = required && (required.indexOf(prop) > -1);
       const fullName = lineage.length ? lineage.join('.')+'.'+prop : prop;
-      r.push(React.DOM.input({
-        key: prop+'input',
+      r.push(FormInput({
+        id: prop,
+        key: prop + 'input',
         type: type,
         required: isRequired,
         name: fullName
@@ -45,9 +46,9 @@ module.exports = React.createClass({
 
       return r;
     }, []);
-    return React.DOM.fieldset(
+    return React.DOM.div(
       { key: key+'fieldset' },
-      React.DOM.legend({ key: key+'legend' }, key),
+      React.DOM.h5({ key: key+'legend' }, 'Create new ' + key),
       inputs
     );
   },
@@ -94,13 +95,22 @@ module.exports = React.createClass({
         onSubmit: this.submissionHandler
       },
       fieldsets,
-      React.DOM.input({ type: 'submit', key: this.props.name+'submit', text: 'Submit' })
+      FormInput({
+        type: 'submit',
+        key: this.props.name+'submit',
+        text: 'Submit',
+        className: 'waves-effect waves-light btn cyan'
+      })
     ) : null;
 
     return React.DOM.div(
       { key: this.props.name+'creatorContainer' },
       form,
-      React.DOM.button({ onClick: this.toggleCreationForm, key: 'create' }, this.state.createButtonText)
+      React.DOM.button({
+        onClick: this.toggleCreationForm,
+        key: 'create',
+        className: 'waves-effect waves-light btn cyan'
+      }, this.state.createButtonText)
     );
   }
 });
