@@ -1,6 +1,8 @@
 import React, { Component, createFactory, DOM, PropTypes } from 'react';
+import action from './action';
 import listItem from './list_item';
 
+const Action = createFactory(action);
 const ListItem = createFactory(listItem);
 
 export default class Nav extends Component {
@@ -10,10 +12,9 @@ export default class Nav extends Component {
     return DOM.ul(null,
       items.map((item, key) => {
         return ListItem({ key },
-          DOM.a({
+          Action({
             className: 'red-text text-accent-4 flow-text',
-            href: '#',
-            onClick: e => itemOnClick(e, item)
+            path: `/collections/${item}`,
           }, item)
         );
       })
