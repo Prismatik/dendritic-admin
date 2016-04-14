@@ -21,11 +21,13 @@
   "homepage": "https://github.com/Prismatik/redbeard-admin",
   "dependencies": {
     "form2js": "",
+    "history": "^2.0.1",
     "lodash": "",
     "react": "",
     "react-dom": "",
     "react-redux": "",
     "react-resolver": "",
+    "react-router": "^2.2.1",
     "redux": "",
     "redux-actions": "",
     "redux-logger": "",
