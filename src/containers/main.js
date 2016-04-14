@@ -33,13 +33,7 @@ export class Main extends Component {
         DOM.div({ className: 'row' },
           DOM.div({ className: 'container' },
             DOM.div({ className: 'col s12 l2' },
-              Nav({
-                items: Object.keys(collections),
-                itemOnClick: (e, item) => {
-                  e.preventDefault();
-                  navActions.setNavActive(item);
-                }
-              })
+              Nav({ items: Object.keys(collections) })
             ),
             DOM.div({ className: 'col s12 l10' },
               children

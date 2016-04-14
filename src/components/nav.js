@@ -7,7 +7,7 @@ const ListItem = createFactory(listItem);
 
 export default class Nav extends Component {
   render() {
-    const { items, itemOnClick } = this.props;
+    const { items } = this.props;
 
     return DOM.ul(null,
       items.map((item, key) => {
@@ -23,11 +23,9 @@ export default class Nav extends Component {
 };
 
 Nav.propTypes = {
-  items: PropTypes.array,
-  itemOnClick: PropTypes.func
+  items: PropTypes.array
 };
 
 Nav.defaultProps = {
-  items: [],
-  itemOnClick: () => {}
+  items: []
 };
