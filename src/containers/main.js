@@ -1,8 +1,7 @@
-import { find, flow, map, toArray } from 'lodash';
+import { flow } from 'lodash';
 import React, { Component, createFactory, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { resolve } from 'react-resolver';
-import { bindActionCreators } from 'redux';
 import header from '../components/header';
 import nav from '../components/nav';
 import listener from '../components/socket_listener';
@@ -12,7 +11,6 @@ import {
   addToCollection,
   removeFromCollection
 } from '../redux/actions/collections';
-import * as navActions from '../redux/actions/nav';
 
 const Header = createFactory(header);
 const Nav = createFactory(nav);
@@ -20,10 +18,7 @@ const Nav = createFactory(nav);
 export class Main extends Component {
   render() {
     const {
-      api: { url, schema },
-      nav: { active },
       collections,
-      navActions,
       children
     } = this.props;
 
@@ -47,17 +42,12 @@ export class Main extends Component {
 
 Main.propTypes = {
   api: PropTypes.object.isRequired,
-  collections: PropTypes.object.isRequired,
-  nav: PropTypes.object.isRequired
+  collections: PropTypes.object.isRequired
 };
 
 const Connected = connect(state => ({
   api: state.api,
-  collections: state.collections,
-  nav: state.nav
-}), dispatch => ({
-  navActions: bindActionCreators(navActions, dispatch),
-  dispatch
+  collections: state.collections
 }));
 
 const Resolved = resolve('init', ({ api, dispatch }) => {
