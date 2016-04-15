@@ -21,6 +21,8 @@ export function extractHeaders(schemaProps) {
   return flowRight(Object.keys, deepToFlat, extractProps)(schemaProps);
 }
 
+export function arrayToStr(array) { return '[' + array.join(', ') + ']'; }
+
 function extractProps(obj) {
   return reduce(obj, (result, value, key) => {
     if (!value.type) result[key] = extractProps(value);
@@ -28,8 +30,6 @@ function extractProps(obj) {
     return result;
   }, {});
 }
-
-function arrayToStr(array) { return '[' + array.join(', ') + ']'; }
 
 function valueToLink(links, prop, value) {
   const index = map(links, 'rel').indexOf(prop);
