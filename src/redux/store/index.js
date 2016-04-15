@@ -9,7 +9,8 @@ import { collections } from '../reducers/collections';
 
 const logger = createLogger({
   level: 'info',
-  collapsed: true
+  collapsed: true,
+  duration: true
 });
 
 export default applyMiddleware(logger)(createStore);
