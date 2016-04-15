@@ -1,6 +1,6 @@
 import { fromPairs, head, omitBy } from 'lodash';
 import { handleActions } from 'redux-actions';
-import { transform } from '../../lib/transformers/schema';
+import { mapSchemaToData } from '../../lib/transformers/schema';
 
 export const collections = handleActions({
   'GET_COLLECTIONS_SUCCESS': (state, action) => {
@@ -8,7 +8,7 @@ export const collections = handleActions({
   },
   'ADD_TO_COLLECTION': (state, action) => {
     const { item, schema, collection } = action.payload;
-    const transformed = head(transform(schema, item));
+    const transformed = head(mapSchemaToData(schema, item));
 
     return {
       ...state,

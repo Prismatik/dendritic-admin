@@ -1,7 +1,7 @@
 import { flowRight, fromPairs, map, reduce } from 'lodash';
 import { deepToFlat } from '../object';
 
-export function transform(schema, data) {
+export function mapSchemaToData(schema, data) {
   const schemaProps = extractHeaders(schema.properties);
 
   if (!Array.isArray(data)) data = [data];
