@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { flowRight, fromPairs, map, reduce } from 'lodash';
 import { deepToFlat } from '../object';
 
 export function transform(schema, data) {
@@ -13,16 +13,16 @@ export function transform(schema, data) {
       if (Array.isArray(value)) value = arrayToStr(value);
       return [property, value];
     });
-    return _.fromPairs(item);
+    return fromPairs(item);
   });
 }
 
 export function extractHeaders(schemaProps) {
-  return _.flowRight(Object.keys, deepToFlat, extractProps)(schemaProps);
+  return flowRight(Object.keys, deepToFlat, extractProps)(schemaProps);
 }
 
 function extractProps(obj) {
-  return _.reduce(obj, (result, value, key) => {
+  return reduce(obj, (result, value, key) => {
     if (!value.type) result[key] = extractProps(value);
     else result[key] = null;
     return result;
@@ -32,7 +32,7 @@ function extractProps(obj) {
 function arrayToStr(array) { return '[' + array.join(', ') + ']'; }
 
 function valueToLink(links, prop, value) {
-  const index = _.map(links, 'rel').indexOf(prop);
+  const index = map(links, 'rel').indexOf(prop);
   if (index >= 0) return links[index].href.replace(`{${prop}}`, value);
   return value;
 }
