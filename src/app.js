@@ -1,9 +1,11 @@
 import React, { createElement } from 'react';
 import DOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { Router, hashHistory } from 'react-router';
 import main from './containers/main';
 import css from './css/style.css';
 import configureStore, { reducer } from './redux/store';
+import { routes } from './routes';
 import config from '../config';
 
 if (!config.apiUrl) {
@@ -16,5 +18,7 @@ const Main = React.createFactory(main);
 const store = configureStore(reducer, { api: { url: localStorage.apiUrl } });
 
 DOM.render((
-  createElement(Provider, { store }, Main())
+  createElement(Provider, { store },
+    createElement(Router, { history: hashHistory, routes })
+  )
 ), document.getElementById('app'));

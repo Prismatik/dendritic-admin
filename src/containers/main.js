@@ -1,68 +1,37 @@
-import { find, flow, map, toArray } from 'lodash';
+import { flow } from 'lodash';
 import React, { Component, createFactory, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { resolve } from 'react-resolver';
-import { bindActionCreators } from 'redux';
-import creator from '../components/creator';
 import header from '../components/header';
 import nav from '../components/nav';
 import listener from '../components/socket_listener';
-import table from '../components/table';
 import { getApiSuccess } from '../redux/actions/api';
 import {
   getCollectionsSuccess,
   addToCollection,
   removeFromCollection
 } from '../redux/actions/collections';
-import * as navActions from '../redux/actions/nav';
-import { extractHeaders } from '../lib/transformers/schema';
 
-const Creator = createFactory(creator);
 const Header = createFactory(header);
 const Nav = createFactory(nav);
-const Table = createFactory(table);
 
 export class Main extends Component {
   render() {
     const {
-      api: { url, schema },
-      nav: { active },
       collections,
-      navActions
+      children
     } = this.props;
 
-    const activeSchema = schema[active];
-
     return DOM.div(null,
-      Header(null, 'Redbeard Admin'),
+      Header(),
       DOM.main(null,
         DOM.div({ className: 'row' },
           DOM.div({ className: 'container' },
             DOM.div({ className: 'col s12 l2' },
-              Nav({
-                items: Object.keys(collections),
-                itemOnClick: (e, item) => {
-                  e.preventDefault();
-                  navActions.setNavActive(item);
-                }
-              })
+              Nav({ items: Object.keys(collections) })
             ),
             DOM.div({ className: 'col s12 l10' },
-              activeSchema
-                ? DOM.div({ className: 'section' },
-                    Creator({
-                      schema: activeSchema,
-                      name: activeSchema.name,
-                      apiUrl: url,
-                      pluralName: activeSchema.pluralName
-                    }),
-                    Table({
-                      name: activeSchema.pluralName,
-                      headers: extractHeaders(activeSchema.properties),
-                      data: toArray(collections[activeSchema.name])
-                    })
-                  )
-                : null
+              children
             )
           )
         )
@@ -73,17 +42,12 @@ export class Main extends Component {
 
 Main.propTypes = {
   api: PropTypes.object.isRequired,
-  collections: PropTypes.object.isRequired,
-  nav: PropTypes.object.isRequired
+  collections: PropTypes.object.isRequired
 };
 
 const Connected = connect(state => ({
   api: state.api,
-  collections: state.collections,
-  nav: state.nav
-}), dispatch => ({
-  navActions: bindActionCreators(navActions, dispatch),
-  dispatch
+  collections: state.collections
 }));
 
 const Resolved = resolve('init', ({ api, dispatch }) => {
