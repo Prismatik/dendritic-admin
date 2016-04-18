@@ -4,16 +4,13 @@ import { deepToFlat } from '../object';
 export function mapSchemaToData(schema, data) {
   const schemaProps = extractHeaders(schema.properties);
 
-  if (!Array.isArray(data)) data = [data];
-  return data.map(record => {
-    const flatObj = deepToFlat(record);
-    const item = schemaProps.map(property => {
-      let value = flatObj[property];
-      if (schema.links) value = valueToLink(schema.links, property, value);
+  return mapSchema(schemaProps, data)((flatProps, flatValue) => {
+    return map(flatProps, (prop, key) => {
+      let value = flatValue[prop];
+      if (schema.links) value = valueToLink(schema.links, prop, value);
       if (Array.isArray(value)) value = arrayToStr(value);
-      return [property, value];
+      return [prop, value];
     });
-    return fromPairs(item);
   });
 }
 
@@ -21,8 +18,8 @@ export function mapSchemaToFormInputs(props, data) {
   const schemaProps = flowRight(deepToFlat, extractProps)(props);
 
   return mapSchema(schemaProps, data)((flatProps, flatValue) => {
-    return map(flatProps, (val, key) => {
-      const parsed = JSON.parse(val);
+    return map(flatProps, (prop, key) => {
+      const parsed = JSON.parse(prop);
 
       if (parsed.type == 'string') parsed.type = 'text';
       parsed.value = flatValue[key];
