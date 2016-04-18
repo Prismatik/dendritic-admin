@@ -12,7 +12,7 @@ describe('./redux/reducers/collection', function() {
         '3': { id: '3', name: 'doug' }
       },
       wolf: {
-        '2': { id: '2', name: 'barry', sheep: '2' }
+        '2': { id: '2', name: 'barry', sheep: '3' }
       }
     };
   });

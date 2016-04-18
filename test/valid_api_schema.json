@@ -11,6 +11,16 @@
       "name": {
         "type": "string",
         "faker": "name.findName"
+      },
+      "attributes": {
+        "color": {
+          "type": "string",
+          "pattern": "white|black"
+        },
+        "size": {
+          "type": "string",
+          "pattern": "small|big"
+        }
       }
     },
     "required": ["name"]
