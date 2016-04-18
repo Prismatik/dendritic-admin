@@ -26,7 +26,7 @@ export function arrayToStr(array) { return '[' + array.join(', ') + ']'; }
 function extractProps(obj) {
   return reduce(obj, (result, value, key) => {
     if (!value.type) result[key] = extractProps(value);
-    else result[key] = null;
+    else result[key] = JSON.stringify(value);
     return result;
   }, {});
 }
