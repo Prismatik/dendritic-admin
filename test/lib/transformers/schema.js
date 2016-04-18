@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash';
 import {
   mapSchemaToData,
+  mapSchemaToFormInputs,
   extractHeaders,
   arrayToStr
 } from 'root/src/lib/transformers/schema';
@@ -43,6 +44,20 @@ describe('./lib/transformers/schema', function() {
       const data = { name: ['garry', 'larry'] };
       const result = mapSchemaToData(ValidApiSchema.sheep, data);
       result[0].name.must.eql(arrayToStr(data.name));
+    });
+  });
+
+  describe('.mapSchemaToFormInputs', function() {
+    it('must return array of objects', function() {
+      const data = [
+        { id: 1, name: 'garry' },
+        { id: 2, name: 'larry' }
+      ];
+      const props = ValidApiSchema.sheep.properties;
+      const result = mapSchemaToFormInputs(props, data);
+
+      result.must.be.an.array();
+      result[0].must.be.an.object();
     });
   });
 

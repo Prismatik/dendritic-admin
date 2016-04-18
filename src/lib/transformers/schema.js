@@ -1,4 +1,4 @@
-import { flowRight, fromPairs, map, reduce } from 'lodash';
+import _, { flowRight, fromPairs, isUndefined, map, reduce } from 'lodash';
 import { deepToFlat } from '../object';
 
 export function mapSchemaToData(schema, data) {
@@ -17,11 +17,33 @@ export function mapSchemaToData(schema, data) {
   });
 }
 
+export function mapSchemaToFormInputs(props, data) {
+  const schemaProps = flowRight(deepToFlat, extractProps)(props);
+
+  return mapSchema(schemaProps, data)((flatProps, flatValue) => {
+    return map(flatProps, (val, key) => {
+      const parsed = JSON.parse(val);
+
+      if (parsed.type == 'string') parsed.type = 'text';
+      parsed.value = flatValue[key];
+
+      return [key, _(parsed).omit('faker').omitBy(isUndefined).value()];
+    });
+  });
+}
+
 export function extractHeaders(schemaProps) {
   return flowRight(Object.keys, deepToFlat, extractProps)(schemaProps);
 }
 
 export function arrayToStr(array) { return '[' + array.join(', ') + ']'; }
+
+function mapSchema(props, data) {
+  if (!Array.isArray(data)) data = [data];
+  return iterator => data.map(value => {
+    return fromPairs(iterator(props, deepToFlat(value)));
+  });
+}
 
 function extractProps(obj) {
   return reduce(obj, (result, value, key) => {
