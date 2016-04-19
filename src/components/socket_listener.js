@@ -20,10 +20,6 @@ export default function listener(opts) {
           const found = find(sockets, { host });
 
           found.events.forEach(event => {
-      componentWillUnmount() {
-        forEach(this.state.sockets, socket => socket.disconnect());
-      }
-
             socket.on(event.name, event.handler.bind(this));
           });
         });
@@ -33,6 +29,10 @@ export default function listener(opts) {
 
       render() {
         return <ComposedComponent {...this.props} />;
+      }
+
+      componentWillUnmount() {
+        forEach(this.state.sockets, socket => socket.disconnect());
       }
     };
   };
