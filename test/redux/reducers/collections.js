@@ -1,8 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { collections } from 'root/src/redux/reducers/collections';
-import schema from 'root/test/valid_api_schema.json';
-
-const ValidApiSchema = cloneDeep(schema);
+import { ValidSchema } from 'root/test/fixtures/valid_schema';
 
 describe('./redux/reducers/collections', function() {
   beforeEach(function() {
@@ -21,7 +19,7 @@ describe('./redux/reducers/collections', function() {
     beforeEach(function() {
       this.action = {
         type: 'ADD_TO_COLLECTION',
-        payload: { schema: ValidApiSchema.wolf }
+        payload: { schema: ValidSchema.wolf }
       };
     });
 
