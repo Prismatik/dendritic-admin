@@ -1,4 +1,5 @@
 @import url(https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css);
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 
 /* label color */
 .input-field label {
@@ -31,4 +32,13 @@
 /* icon prefix focus color */
 .input-field .prefix.active {
   color: #D50000;
+}
+
+
+/* FAB icons alignment */
+.actions {
+  text-align: right;
+}
+.actions .btn-floating {
+  margin-left: 0.5em;
 }

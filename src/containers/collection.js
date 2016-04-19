@@ -1,9 +1,10 @@
 import { toArray } from 'lodash';
-import React, { Component, createFactory, DOM } from 'react';
+import React, { Component, createFactory, createElement, DOM } from 'react';
 import { connect } from 'react-redux';
 import creator from '../components/creator';
 import table from '../components/table';
 import { extractHeaders } from '../lib/transformers/schema';
+import Fab from '../components/fab';
 
 const Creator = createFactory(creator);
 const Table = createFactory(table);
@@ -11,6 +12,9 @@ const Table = createFactory(table);
 export class Collection extends Component {
   render() {
     const { schema, apiUrl, collection } = this.props;
+    const collectionWithActions = toArray(collection).map(entry => {
+      return { ...entry, '': this.actionsFor(entry) };
+    });
 
     return DOM.div({ className: 'section' },
       Creator({
@@ -22,8 +26,15 @@ export class Collection extends Component {
       Table({
         name: schema.pluralName,
         headers: extractHeaders(schema.properties),
-        data: toArray(collection)
+        data: collectionWithActions
       })
+    );
+  }
+
+  actionsFor(entry) {
+    return DOM.div({ className: 'actions' },
+      createElement(Fab, { color: 'green' }, 'mode_edit'),
+      createElement(Fab, { color: 'red' }, 'delete')
     );
   }
 }

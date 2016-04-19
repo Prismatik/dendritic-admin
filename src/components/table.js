@@ -18,6 +18,7 @@ export default class Table extends Component {
     const columns = headers.map((header, index) => {
       return TableHeaderColumn({ key: index }, header);
     });
+
     return TableRow({ columns });
   }
 
