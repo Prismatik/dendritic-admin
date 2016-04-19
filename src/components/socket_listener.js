@@ -18,14 +18,17 @@ export default function listener(opts) {
 
         forEach(connected, (socket, host) => {
           const found = find(sockets, { host });
-          socket.on(found.event, found.handler);
+
+          found.events.forEach(event => {
+      componentWillUnmount() {
+        forEach(this.state.sockets, socket => socket.disconnect());
+      }
+
+            socket.on(event.name, event.handler.bind(this));
+          });
         });
 
         this.setState({ sockets: connected });
-      }
-
-      componentWillUnmount() {
-        forEach(this.state.sockets, socket => socket.disconnect());
       }
 
       render() {

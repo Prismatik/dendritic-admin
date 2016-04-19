@@ -62,26 +62,33 @@ const Resolved = resolve('init', ({ api, dispatch }) => {
 });
 
 const SocketListener = listener(({ api, collections, dispatch }) => {
-  return Object.keys(collections).map(collection => ({
-    host: api.url + '/' + api.schema[collection].pluralName,
-    event: 'record',
-    handler: data => {
+  return Object.keys(collections).map(collection => {
+    const { pluralName } = api.schema[collection];
+    const host = `${api.url}/${pluralName}`;
 
-      // If API returns an old version, remove it before the new one is added.
-      if (data.old_val) {
-        dispatch(removeFromCollection({
-          item: data.new_val,
-          collection
-        }));
-      }
+    return {
+      host: host,
+      events: [{
+        name: 'record',
+        handler: function(data) {
 
-      dispatch(addToCollection({
-        schema: api.schema[collection],
-        item: data.new_val,
-        collection
-      }));
-    }
-  }));
+          // If API returns an old version, remove it before the new one is added.
+          if (data.old_val) {
+            dispatch(removeFromCollection({
+              item: data.new_val,
+              collection
+            }));
+          }
+
+          dispatch(addToCollection({
+            schema: api.schema[collection],
+            item: data.new_val,
+            collection
+          }));
+        }
+      }]
+    };
+  });
 });
 
 export default flow(SocketListener, Resolved, Connected)(Main);
