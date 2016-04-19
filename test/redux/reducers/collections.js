@@ -4,7 +4,7 @@ import schema from 'root/test/valid_api_schema.json';
 
 const ValidApiSchema = cloneDeep(schema);
 
-describe('./redux/reducers/collection', function() {
+describe('./redux/reducers/collections', function() {
   beforeEach(function() {
     this.initialState = {
       sheep: {
