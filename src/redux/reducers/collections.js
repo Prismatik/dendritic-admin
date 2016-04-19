@@ -1,4 +1,4 @@
-import { fromPairs, head, omitBy } from 'lodash';
+import { fromPairs, head, mapValues, omitBy } from 'lodash';
 import { handleActions } from 'redux-actions';
 import { mapSchemaToData } from '../../lib/transformers/schema';
 
@@ -24,6 +24,17 @@ export const collections = handleActions({
     return {
       ...state,
       [collection]: omitBy(state[collection], (val, key) => key == item.id)
+    };
+  },
+  'UPDATE_COLLECTION_SOCKET_STATUS': (state, action) => {
+    const { status, collection } = action.payload;
+
+    return {
+      ...state,
+      [collection]: mapValues(state[collection], o => {
+        if (o.socket && o.socket.state) o.socket.state = status;
+        return o;
+      })
     };
   }
 }, {});

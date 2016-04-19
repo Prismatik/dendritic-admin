@@ -90,4 +90,36 @@ describe('./redux/reducers/collections', function() {
       result.sheep.must.not.have.keys(['1']);
     });
   });
+
+  describe('UPDATE_COLLECTION_SOCKET_STATUS', function() {
+    beforeEach(function() {
+       this.action = { type: 'UPDATE_COLLECTION_SOCKET_STATUS' };
+    });
+
+    it('must not leave documents with initializing state', function() {
+      let state = cloneDeep(this.initialState);
+      state.sheep['1'].socket = { state: 'initializing' };
+
+      this.action.payload = {
+        collection: 'sheep',
+        status: 'ready'
+      };
+
+      const result = collections(state, this.action);
+      result.sheep['1'].socket.state.must.not.be('initializing');
+    });
+
+    it('must update collection with socket state', function() {
+      let state = cloneDeep(this.initialState);
+      state.sheep['1'].socket = { state: 'initializing' };
+
+      this.action.payload = {
+        collection: 'sheep',
+        status: 'ready'
+      };
+
+      const result = collections(state, this.action);
+      result.sheep['1'].socket.state.must.be('ready');
+    });
+  });
 });
