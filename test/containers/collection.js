@@ -74,13 +74,10 @@ describe('./containers/collection', function() {
   });
 
   describe('.mapStateToProps', function() {
-    before(function() {
-      this.props = { params: { name: this.schema.sheep.name } };
-    });
-
     it('must return correct props from state', function() {
-      const props = mapStateToProps(this.state, this.props);
-      props.must.have.keys(['schema', 'apiUrl', 'data']);
+      const props = { params: { name: this.schema.sheep.name } };
+      const mapped = mapStateToProps(this.state, props);
+      mapped.must.have.keys(['schema', 'apiUrl', 'data']);
     });
   });
 });
