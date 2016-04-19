@@ -9,7 +9,8 @@ import { getApiSuccess } from '../redux/actions/api';
 import {
   getCollectionsSuccess,
   addToCollection,
-  removeFromCollection
+  removeFromCollection,
+  updateCollectionSocketStatus
 } from '../redux/actions/collections';
 
 const Header = createFactory(header);
@@ -71,20 +72,29 @@ const SocketListener = listener(({ api, collections, dispatch }) => {
       events: [{
         name: 'record',
         handler: function(data) {
+          const item = data.new_val;
 
-          // If API returns an old version, remove it before the new one is added.
+          // If API returns an old version, remove it before the new one is
+          // added.
           if (data.old_val) {
-            dispatch(removeFromCollection({
-              item: data.new_val,
-              collection
-            }));
+            dispatch(removeFromCollection({ item, collection }));
           }
 
           dispatch(addToCollection({
             schema: api.schema[collection],
-            item: data.new_val,
+            item,
             collection
           }));
+        }
+      }, {
+        name: 'state',
+        handler: function(data) {
+          if (data.state === 'ready') {
+            dispatch(updateCollectionSocketStatus({
+              status: data.state,
+              collection
+            }));
+          }
         }
       }]
     };
