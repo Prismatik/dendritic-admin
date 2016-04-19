@@ -1,4 +1,4 @@
-import { toArray } from 'lodash';
+import { isEqual, omit, reduce, toArray } from 'lodash';
 import React, { Component, createFactory, DOM } from 'react';
 import { connect } from 'react-redux';
 import creator from '../components/creator';
@@ -9,8 +9,20 @@ const Creator = createFactory(creator);
 const Table = createFactory(table);
 
 export class Collection extends Component {
+  static sanitizeData(data) {
+    return toArray(reduce(data, (result, value, key) => {
+      if (value.socket.state === 'ready') result[key] = omit(value, 'socket');
+      return result;
+    }, {}));
+  }
+
+  shouldComponentUpdate({ data }) {
+    if (!isEqual(data, this.props.data)) return true;
+    return false;
+  }
+
   render() {
-    const { schema, apiUrl, collection } = this.props;
+    const { schema, apiUrl, data } = this.props;
 
     return DOM.div({ className: 'section' },
       Creator({
@@ -22,16 +34,18 @@ export class Collection extends Component {
       Table({
         name: schema.pluralName,
         headers: extractHeaders(schema.properties),
-        data: toArray(collection)
+        data
       })
     );
   }
 }
 
-const Connected = connect((state, props) => ({
-  schema: state.api.schema[props.params.name],
-  apiUrl: state.api.url,
-  collection: state.collections[props.params.name]
-}));
+export function mapStateToProps(state, { params: { name } }) {
+  return {
+    schema: state.api.schema[name],
+    apiUrl: state.api.url,
+    data: Collection.sanitizeData(state.collections[name])
+  };
+}
 
-export default Connected(Collection);
+export default connect(mapStateToProps)(Collection);
