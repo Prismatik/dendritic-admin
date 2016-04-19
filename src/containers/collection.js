@@ -1,5 +1,5 @@
 import { isEqual, omit, reduce, toArray } from 'lodash';
-import React, { Component, createFactory, DOM } from 'react';
+import React, { Component, createFactory, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import creator from '../components/creator';
 import table from '../components/table';
@@ -39,6 +39,16 @@ export class Collection extends Component {
     );
   }
 }
+
+Collection.propTypes = {
+  schema: PropTypes.object.isRequired,
+  apiUrl: PropTypes.string.isRequired,
+  data: PropTypes.array
+};
+
+Collection.defaultProps = {
+  data: []
+};
 
 export function mapStateToProps(state, { params: { name } }) {
   return {
