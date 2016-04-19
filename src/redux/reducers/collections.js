@@ -14,7 +14,7 @@ export const collections = handleActions({
       ...state,
       [collection]: {
         ...state[collection],
-        [item.id]: transformed
+        [item.id]: { ...transformed, socket: { state: 'initializing' } }
       }
     };
   },

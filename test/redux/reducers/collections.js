@@ -56,7 +56,10 @@ describe('./redux/reducers/collection', function() {
 
       const result = collections(this.initialState, this.action);
       result.wolf['3'].must.eql({
-        id: 3, name: 'larry', sheep: '/sheep/1'
+        id: 3,
+        name: 'larry',
+        sheep: '/sheep/1',
+        socket: { state: 'initializing' }
       });
     });
   });
