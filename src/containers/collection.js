@@ -5,6 +5,7 @@ import { removeFromCollection } from '../redux/actions/collections';
 import creator from '../components/creator';
 import table from '../components/table';
 import Fab from '../components/fab';
+import Confirm from '../components/confirm';
 import { extractHeaders } from '../lib/transformers/schema';
 
 const Creator = createFactory(creator);
@@ -12,6 +13,7 @@ const Table = createFactory(table);
 
 export class Collection extends Component {
   render() {
+    const { confirm } = this.state || {};
     const { schema, apiUrl, collection } = this.props;
     const collectionWithActions = toArray(collection).map(entry => {
       return { ...entry, '': this.actionsFor(entry) };
@@ -28,7 +30,10 @@ export class Collection extends Component {
         name: schema.pluralName,
         headers: extractHeaders(schema.properties),
         data: collectionWithActions
-      })
+      }),
+      confirm && createElement(Confirm, {
+        onDone: okay => this.closeConfirmDialog(okay)
+      }, confirm)
     );
   }
 
@@ -43,7 +48,16 @@ export class Collection extends Component {
     const { schema, removeFromCollection } = this.props;
 
     event.preventDefault();
-    removeFromCollection(entry, schema.name);
+
+    this.setState({
+      confirm: `Are you sure you want to delete this item?`,
+      onDone: okay => okay && removeFromCollection(entry, schema.name)
+    });
+  }
+
+  closeConfirmDialog(okay) {
+    this.state.onDone && this.state.onDone(okay);
+    this.setState({ confirm: null, onOkay: null });
   }
 }
 

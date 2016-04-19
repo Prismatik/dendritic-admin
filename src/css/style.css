@@ -34,11 +34,21 @@
   color: #D50000;
 }
 
-
 /* FAB icons alignment */
 .actions {
   text-align: right;
 }
 .actions .btn-floating {
   margin-left: 0.5em;
+}
+
+/* dialog styles */
+.dialog .modal {
+  display: block;
+  top: 25%;
+  z-index: 9999;
+}
+.dialog .lean-overlay {
+  display: block;
+  opacity: 0.5;
 }
