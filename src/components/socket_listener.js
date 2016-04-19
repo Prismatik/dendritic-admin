@@ -20,7 +20,7 @@ export default function listener(opts) {
           const found = find(sockets, { host });
 
           found.events.forEach(event => {
-            socket.on(event.name, event.handler.bind(this));
+            socket.on(event.name, event.handler);
           });
         });
 
