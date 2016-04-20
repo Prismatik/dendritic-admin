@@ -6,5 +6,11 @@ describe('./redux/actions/collections', function() {
       const action = actions.updateCollectionSocketStatus({});
       action.type.must.eql('UPDATE_COLLECTION_SOCKET_STATUS');
     });
+
+    it('must return input as payload property', function() {
+      const input = { id: 1, name: 'garry' };
+      const action = actions.updateCollectionSocketStatus(input);
+      action.payload.must.eql(input);
+    });
   });
 });
