@@ -1,4 +1,4 @@
-import { isPlainObject } from 'lodash';
+import { isObjectLike, isPlainObject } from 'lodash';
 
 exports.deepToFlat = function deepToFlat(obj) {
   let recurse, res;
@@ -20,3 +20,11 @@ exports.deepToFlat = function deepToFlat(obj) {
   recurse(obj);
   return res;
 };
+
+export function deepFreeze(obj) {
+  Object.getOwnPropertyNames(obj).forEach(name => {
+    const val = obj[name];
+    if (isObjectLike(val)) deepFreeze(val);
+  });
+  return Object.freeze(obj);
+}
