@@ -18,28 +18,27 @@ describe('./containers/collection', function() {
 
   describe('Collection', function() {
     describe('static.sanitizeData', function() {
-      it('must return array', function() {
-        const data = Collection.sanitizeData([
-          { id: 1, name: 'garry', socket: { state: 'ready' } }
-        ]);
-        data.must.be.an.array();
+      it('must not return items that are not state = ready', function() {
+        const notReady = { id: 1, name: 'garry', socket: { state: 'initializing' } };
+        const ready = { id: 2, name: 'larry', socket: { state: 'ready' } };
+        const sanitized = Collection.sanitizeData([ready, notReady]);
+
+        sanitized.must.not.include(notReady);
       });
 
-      it('must not return item if socket state is not ready', function() {
-        const data = Collection.sanitizeData([
-          { id: 1, name: 'garry', socket: { state: 'initializing' } },
-          { id: 2, name: 'larry', socket: { state: 'ready' } }
-        ]);
+      it('must only return items that are state = ready', function() {
+        const notReady = { id: 1, name: 'garry', socket: { state: 'initializing' } };
+        const ready = { id: 2, name: 'larry', socket: { state: 'ready' } };
+        const sanitized = Collection.sanitizeData([ready, notReady]);
 
-        data.must.have.length(1);
-        data[0].id.must.be(2);
+        sanitized.must.eql([{ id: 2, name: 'larry' }]);
       });
 
-      it('must remove socket property if socket is ready', function() {
-        const data = Collection.sanitizeData([
-          { id: 1, name: 'garry', socket: { state: 'ready' } }
-        ]);
-        data[0].must.not.have.property('socket');
+      it('must remove socket property state = ready items', function() {
+        const ready = { id: 1, name: 'garry', socket: { state: 'ready' } };
+        const sanitized = Collection.sanitizeData([ready]);
+
+        sanitized[0].must.not.have.property('socket');
       });
     });
 
