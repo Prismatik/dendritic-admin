@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Prismatik/redbeard-admin",
   "dependencies": {
+    "axios": "",
     "form2js": "",
     "history": "",
     "lodash": "",
@@ -45,6 +46,7 @@
     "must": "^0.13.1",
     "must-jsx": "^1.0.8",
     "react-addons-test-utils": "^0.14.8",
+    "nock": "^8.0.0",
     "react-hot-loader": "^1.3.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.12.13",
