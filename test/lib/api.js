@@ -5,7 +5,7 @@ import nock from 'nock';
 const DUMMY_HOST = 'http://dummy.com';
 const mock = nock(DUMMY_HOST);
 
-describe.only('API connection pipe', () => {
+describe('API connection pipe', () => {
   beforeEach(() => {
     config.apiUrl = DUMMY_HOST;
     nock.cleanAll();
@@ -15,11 +15,9 @@ describe.only('API connection pipe', () => {
     it('gets things from the host', done => {
       mock.get('/some/url').reply(200, {some: 'data'});
 
-      api.get('/some/url').then(data => {
-        data.must.eql({some: 'data'});
-        done();
-      })
-      .catch(done);
+      api.get('/some/url')
+      .then(data => data.must.eql({some: 'data'}))
+      .then(done).catch(done);
     });
 
     it('handles cases when things don\'t go so well on the other end', done => {
@@ -78,11 +76,9 @@ describe.only('API connection pipe', () => {
     it('deletes things from the host', done => {
       mock.delete('/some/url').reply(200, {ok: true});
 
-      api.delete('/some/url').then(data => {
-        data.must.eql({ok: true});
-        done();
-      })
-      .catch(done);
+      api.delete('/some/url')
+        .then(data => data.must.eql({ok: true}))
+        .then(done).catch(done);
     });
 
     it('handles cases when things don\'t go so well on the other end', done => {

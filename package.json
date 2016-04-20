@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Prismatik/redbeard-admin",
   "dependencies": {
-    "axios": "",
+    "axios": "^0.9.1",
     "form2js": "",
     "history": "",
     "lodash": "",
@@ -32,6 +32,7 @@
     "redux": "",
     "redux-actions": "",
     "redux-logger": "",
+    "redux-promise": "^0.5.3",
     "socket.io-client": ""
   },
   "devDependencies": {
