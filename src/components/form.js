@@ -17,6 +17,11 @@ export default class Form extends Component {
           type,
           key
         });
+      }),
+      FormInput({
+        type: 'submit',
+        text: 'Submit',
+        className: 'waves-effect waves-light btn cyan'
       })
     );
   }
