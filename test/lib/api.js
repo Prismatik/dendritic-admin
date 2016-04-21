@@ -5,13 +5,13 @@ import nock from 'nock';
 const DUMMY_HOST = 'http://dummy.com';
 const mock = nock(DUMMY_HOST);
 
-describe('API connection pipe', () => {
+describe('./lib/api', () => {
   beforeEach(() => {
     config.apiUrl = DUMMY_HOST;
     nock.cleanAll();
   });
 
-  describe('#get(path)', () => {
+  describe('.get(path)', () => {
     it('gets things from the host', done => {
       mock.get('/some/url').reply(200, {some: 'data'});
 
@@ -32,7 +32,7 @@ describe('API connection pipe', () => {
     });
   });
 
-  describe('#post(path, data)', () => {
+  describe('.post(path, data)', () => {
     it('posts things and yields responses back', done => {
       mock.post('/some/url', {some: 'data'}).reply(201, {ok: true});
       api.post('/some/url', {some: 'data'})
@@ -52,7 +52,7 @@ describe('API connection pipe', () => {
     });
   });
 
-  describe('#put(path, data)', () => {
+  describe('.put(path, data)', () => {
     it('posts things and yields responses back', done => {
       mock.put('/some/url', {some: 'data'}).reply(200, {ok: true});
       api.put('/some/url', {some: 'data'})
@@ -72,7 +72,7 @@ describe('API connection pipe', () => {
     });
   });
 
-  describe('#delete(path)', () => {
+  describe('.delete(path)', () => {
     it('deletes things from the host', done => {
       mock.delete('/some/url').reply(200, {ok: true});
 
