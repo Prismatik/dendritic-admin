@@ -1,3 +1,4 @@
+import { forEach } from 'lodash';
 import {
   mapSchemaToData,
   mapSchemaToFormInputs,
@@ -106,6 +107,12 @@ describe('./lib/transformers/schema', function() {
       const result = mapSchemaToFormInputs(this.schema, data);
 
       result.id.must.not.have.property('required');
+    });
+
+    it('must return empty value property if no data passed', function() {
+      forEach(mapSchemaToFormInputs(this.schema), val => {
+        val.must.not.have.property('value');
+      });
     });
   });
 
