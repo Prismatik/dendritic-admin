@@ -12,12 +12,9 @@ describe('./lib/api', () => {
   });
 
   describe('.get(path)', () => {
-    it('gets things from the host', done => {
+    it('gets things from the host', () => {
       mock.get('/some/url').reply(200, {some: 'data'});
-
-      api.get('/some/url')
-      .then(data => data.must.eql({some: 'data'}))
-      .then(done).catch(done);
+      return api.get('/some/url').must.resolve.to.eql({some: 'data'});
     });
 
     it('handles cases when things don\'t go so well on the other end', done => {
@@ -33,52 +30,46 @@ describe('./lib/api', () => {
   });
 
   describe('.post(path, data)', () => {
-    it('posts things and yields responses back', done => {
+    it('posts things and yields responses back', () => {
       mock.post('/some/url', {some: 'data'}).reply(201, {ok: true});
-      api.post('/some/url', {some: 'data'})
-        .then(result => result.must.eql({ok: true}))
-        .then(done).catch(done);
+      return api.post('/some/url', {some: 'data'}).must.resolve.to.eql({ok: true});
     });
 
     it('recovers from the other side failures', done => {
       mock.post('/some/url', {some: 'data'}).reply(422, {validation: 'failed'});
       api.post('/some/url', {some: 'data'})
-      .then(data => done(`Call must reject, instead got: ${data}`))
-      .catch(error => {
-        error.status.must.eql(422);
-        error.data.must.eql({validation: 'failed'});
-      })
-      .then(done).catch(done);
+        .then(data => done(`Call must reject, instead got: ${data}`))
+        .catch(error => {
+          error.status.must.eql(422);
+          error.data.must.eql({validation: 'failed'});
+        })
+        .then(done).catch(done);
     });
   });
 
   describe('.put(path, data)', () => {
-    it('posts things and yields responses back', done => {
+    it('posts things and yields responses back', () => {
       mock.put('/some/url', {some: 'data'}).reply(200, {ok: true});
-      api.put('/some/url', {some: 'data'})
-        .then(result => result.must.eql({ok: true}))
-        .then(done).catch(done);
+      return api.put('/some/url', {some: 'data'}).must.resolve.to.eql({ok: true});
     });
 
     it('recovers from the other side failures', done => {
       mock.put('/some/url', {some: 'data'}).reply(422, {validation: 'failed'});
       api.put('/some/url', {some: 'data'})
-      .then(data => done(`Call must reject, instead got: ${data}`))
-      .catch(error => {
-        error.status.must.eql(422);
-        error.data.must.eql({validation: 'failed'});
-      })
-      .then(done).catch(done);
+        .then(data => done(`Call must reject, instead got: ${data}`))
+        .catch(error => {
+          error.status.must.eql(422);
+          error.data.must.eql({validation: 'failed'});
+        })
+        .then(done).catch(done);
     });
   });
 
   describe('.delete(path)', () => {
-    it('deletes things from the host', done => {
+    it('deletes things from the host', () => {
       mock.delete('/some/url').reply(200, {ok: true});
 
-      api.delete('/some/url')
-        .then(data => data.must.eql({ok: true}))
-        .then(done).catch(done);
+      return api.delete('/some/url').must.resolve.to.eql({ok: true});
     });
 
     it('handles cases when things don\'t go so well on the other end', done => {
