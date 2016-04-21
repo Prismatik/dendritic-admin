@@ -7,7 +7,10 @@
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development webpack-dev-server --hot --inline",
     "test": "./node_modules/.bin/_mocha",
-    "autotest": "./node_modules/.bin/_mocha --watch"
+    "autotest": "./node_modules/.bin/_mocha --watch",
+    "lint": "node_modules/.bin/jscs src test",
+    "precommit": "npm run lint",
+    "prepush": "npm test"
   },
   "repository": {
     "type": "git",
@@ -41,6 +44,8 @@
     "babel-preset-react": "^6.5.0",
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.5",
+    "husky": "^0.11.4",
+    "jscs": "=2.11.0",
     "mocha": "^2.4.5",
     "must": "^0.13.1",
     "must-jsx": "^1.0.8",
