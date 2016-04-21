@@ -7,6 +7,12 @@ export const removeFromCollection = createAction('REMOVE_FROM_COLLECTION');
 export const updateCollectionSocketStatus = createAction('UPDATE_COLLECTION_SOCKET_STATUS');
 
 // async actions
+export const postToCollection = createAsyncAction('ADD_TO_COLLECTION',
+  ({ item, collection }) => {
+    return api.post(`/${collection}`, item)
+      .then(newItem => Object.assign(item, newItem));
+  }
+);
 
 export const deleteFromCollection = createAsyncAction('REMOVE_FROM_COLLECTION',
   ({ item, collection }) => api.delete(`/${collection}/${item.id}`)

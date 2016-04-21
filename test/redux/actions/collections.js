@@ -15,6 +15,43 @@ describe('./redux/actions/collections', () => {
     });
   });
 
+  describe('postToCollection({ item, collection })', () => {
+    it('handles the good path well', done => {
+      mockApi.post('/rockets', {name: 'blah!'}).reply(201, {id: 234, name: 'blah!'});
+      const payload = { item: {name: 'blah!'}, collection: 'rockets' };
+      const store = mockStore({});
+      store.dispatch(actions.postToCollection(Object.assign({}, payload)))
+        .then(() => {
+          store.getActions().must.eql([
+            { type: 'ADD_TO_COLLECTION_SENT', payload },
+            {
+              type: 'ADD_TO_COLLECTION',
+              payload: {
+                item: {id: 234, name: 'blah!'},
+                collection: 'rockets'
+              },
+              response: {id: 234, name: 'blah!'}
+            }
+          ]);
+        })
+        .then(done).catch(done);
+    });
+
+    it('handles API failures gracefully', done => {
+      mockApi.post('/rockets', {name: 'blah!'}).reply(422, {sorry: 'mate'});
+      const payload = { item: {name: 'blah!'}, collection: 'rockets' };
+      const store = mockStore({});
+      store.dispatch(actions.postToCollection(Object.assign({}, payload)))
+        .then(() => {
+          store.getActions().must.eql([
+            { type: 'ADD_TO_COLLECTION_SENT', payload },
+            { type: 'ADD_TO_COLLECTION_FAILED', payload, error: {sorry: 'mate'} }
+          ]);
+        })
+        .then(done).catch(done);
+    });
+  });
+
   describe('deleteFromCollection({ item, collection })', () => {
     const payload = {
       item: {id: 123},
