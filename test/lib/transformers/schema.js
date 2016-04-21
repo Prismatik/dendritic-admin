@@ -98,7 +98,7 @@ describe('./lib/transformers/schema', function() {
       const data = { id: 1, name: undefined };
       const result = mapSchemaToFormInputs(this.schema, data);
 
-      result.name.must.eql({ required: true, type: "text" });
+      result.name.must.eql({ required: true, type: 'text' });
     });
 
     it('must not add required property if not required by schema', function() {
