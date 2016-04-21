@@ -1,4 +1,3 @@
-import { head } from 'lodash';
 import React, { Component, createFactory, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import form from '../components/form';
@@ -9,7 +8,7 @@ const Form = createFactory(form);
 export class Doc extends Component {
   render() {
     const { schemaProps, doc } = this.props;
-    const inputs = head(mapSchemaToFormInputs(schemaProps, doc));
+    const inputs = mapSchemaToFormInputs(schemaProps, doc);
 
     return DOM.div({ className: 'section' }, Form(null, inputs));
   }
