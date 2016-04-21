@@ -1,33 +1,31 @@
-import _, { flowRight, fromPairs, isUndefined, map, reduce } from 'lodash';
+import _, { flowRight, fromPairs, head, isUndefined, map, reduce } from 'lodash';
 import { deepToFlat } from '../object';
 
 export function mapSchemaToData(schema, data) {
   const schemaProps = extractHeaders(schema.properties);
+  const iterator = (flatValue, prop, key) => {
+    let value = flatValue[prop];
+    if (schema.links) value = valueToLink(schema.links, prop, value);
+    if (Array.isArray(value)) value = arrayToStr(value);
+    return [prop, value];
+  };
 
-  return mapSchema(schemaProps, data)((flatProps, flatValue) => {
-    return map(flatProps, (prop, key) => {
-      let value = flatValue[prop];
-      if (schema.links) value = valueToLink(schema.links, prop, value);
-      if (Array.isArray(value)) value = arrayToStr(value);
-      return [prop, value];
-    });
-  });
+  return mapSchema(schemaProps, data, iterator);
 }
 
 export function mapSchemaToFormInputs(schema: { required: [] }, data) {
   const schemaProps = flowRight(deepToFlat, extractProps)(schema.properties);
+  const iterator = (flatValue, prop, key) => {
+    const parsed = JSON.parse(prop);
 
-  return mapSchema(schemaProps, data)((flatProps, flatValue) => {
-    return map(flatProps, (prop, key) => {
-      const parsed = JSON.parse(prop);
+    if (parsed.type == 'string') parsed.type = 'text';
+    if (schema.required.indexOf(key) >= 0) parsed.required = true;
+    parsed.value = flatValue[key];
 
-      if (parsed.type == 'string') parsed.type = 'text';
-      if (schema.required.indexOf(key) >= 0) parsed.required = true;
-      parsed.value = flatValue[key];
+    return [key, _(parsed).omit('faker').omitBy(isUndefined).value()];
+  };
 
-      return [key, _(parsed).omit('faker').omitBy(isUndefined).value()];
-    });
-  });
+  return head(mapSchema(schemaProps, data, iterator));
 }
 
 export function extractHeaders(schemaProps) {
@@ -36,10 +34,11 @@ export function extractHeaders(schemaProps) {
 
 export function arrayToStr(array) { return '[' + array.join(', ') + ']'; }
 
-function mapSchema(props, data) {
+function mapSchema(props, data, iterator) {
   if (!Array.isArray(data)) data = [data];
-  return iterator => data.map(value => {
-    return fromPairs(iterator(props, deepToFlat(value)));
+  return data.map(value => {
+    const flatValue = deepToFlat(value);
+    return fromPairs(map(props, iterator.bind(null, flatValue)));
   });
 }
 

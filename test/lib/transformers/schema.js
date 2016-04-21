@@ -49,64 +49,63 @@ describe('./lib/transformers/schema', function() {
       this.schema = ValidSchema.sheep;
     });
 
-    it('must return array of objects', function() {
+    it('must return an object', function() {
       const data = [
         { id: 1, name: 'garry' },
         { id: 2, name: 'larry' }
       ];
       const result = mapSchemaToFormInputs(this.schema, data);
 
-      result.must.be.an.array();
-      result[0].must.be.an.object();
+      result.must.be.an.object();
     });
 
     it('must not return type = string', function() {
       const data = { id: 1 };
       const result = mapSchemaToFormInputs(this.schema, data);
 
-      result[0].id.type.must.not.eql('string');
+      result.id.type.must.not.eql('string');
     });
 
     it('must return type = string as type = text', function() {
       const data = { id: 1 };
       const result = mapSchemaToFormInputs(this.schema, data);
 
-      result[0].id.type.must.eql('text');
+      result.id.type.must.eql('text');
     });
 
     it('must not return faker property', function() {
       const data = { id: 1 };
       const result = mapSchemaToFormInputs(this.schema, data);
 
-      result[0].must.not.have.property('faker');
+      result.must.not.have.property('faker');
     });
 
     it('must return value property', function() {
       const data = { id: 1 };
       const result = mapSchemaToFormInputs(this.schema, data);
 
-      result[0].id.value.must.be(1);
+      result.id.value.must.be(1);
     });
 
     it('must not return value property if undefined', function() {
       const data = { id: 1, name: undefined };
       const result = mapSchemaToFormInputs(this.schema, data);
 
-      result[0].name.must.not.have.property('value');
+      result.name.must.not.have.property('value');
     });
 
     it('must add required property if found in schema', function() {
       const data = { id: 1, name: undefined };
       const result = mapSchemaToFormInputs(this.schema, data);
 
-      result[0].name.must.eql({ required: true, type: "text" });
+      result.name.must.eql({ required: true, type: "text" });
     });
 
     it('must not add required property if not required by schema', function() {
       const data = { id: 1, name: undefined };
       const result = mapSchemaToFormInputs(this.schema, data);
 
-      result[0].id.must.not.have.property('required');
+      result.id.must.not.have.property('required');
     });
   });
 
