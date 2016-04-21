@@ -6,14 +6,16 @@ const FormInput = createFactory(formInput);
 
 export default class Form extends Component {
   render() {
-    return DOM.form(null, map(this.props.children, (field, key) => {
-      return FormInput({
-        id: key,
-        name: key,
-        defaultValue: field.value,
-        type: field.type,
-        key
-      });
-    }));
+    return DOM.form(null,
+      map(this.props.children, ({ type, value = null }, key) => {
+        return FormInput({
+          id: key,
+          name: key,
+          defaultValue: value,
+          type,
+          key
+        });
+      })
+    );
   }
 };
