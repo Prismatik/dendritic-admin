@@ -94,6 +94,20 @@ describe('./lib/transformers/schema', function() {
 
       result[0].name.must.not.have.property('value');
     });
+
+    it('must add required property if found in schema', function() {
+      const data = { id: 1, name: undefined };
+      const result = mapSchemaToFormInputs(this.schema, data);
+
+      result[0].name.must.eql({ required: true, type: "text" });
+    });
+
+    it('must not add required property if not required by schema', function() {
+      const data = { id: 1, name: undefined };
+      const result = mapSchemaToFormInputs(this.schema, data);
+
+      result[0].id.must.not.have.property('required');
+    });
   });
 
   describe('.extractHeaders', function() {

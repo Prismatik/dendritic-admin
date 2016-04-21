@@ -14,7 +14,7 @@ export function mapSchemaToData(schema, data) {
   });
 }
 
-export function mapSchemaToFormInputs(schema, data) {
+export function mapSchemaToFormInputs(schema: { required: [] }, data) {
   const schemaProps = flowRight(deepToFlat, extractProps)(schema.properties);
 
   return mapSchema(schemaProps, data)((flatProps, flatValue) => {
@@ -22,6 +22,7 @@ export function mapSchemaToFormInputs(schema, data) {
       const parsed = JSON.parse(prop);
 
       if (parsed.type == 'string') parsed.type = 'text';
+      if (schema.required.indexOf(key) >= 0) parsed.required = true;
       parsed.value = flatValue[key];
 
       return [key, _(parsed).omit('faker').omitBy(isUndefined).value()];
