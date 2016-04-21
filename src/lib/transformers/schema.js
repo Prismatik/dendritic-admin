@@ -14,8 +14,8 @@ export function mapSchemaToData(schema, data) {
   });
 }
 
-export function mapSchemaToFormInputs(props, data) {
-  const schemaProps = flowRight(deepToFlat, extractProps)(props);
+export function mapSchemaToFormInputs(schema, data) {
+  const schemaProps = flowRight(deepToFlat, extractProps)(schema.properties);
 
   return mapSchema(schemaProps, data)((flatProps, flatValue) => {
     return map(flatProps, (prop, key) => {

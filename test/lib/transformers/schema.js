@@ -45,13 +45,16 @@ describe('./lib/transformers/schema', function() {
   });
 
   describe('.mapSchemaToFormInputs', function() {
+    beforeEach(function() {
+      this.schema = ValidSchema.sheep;
+    });
+
     it('must return array of objects', function() {
       const data = [
         { id: 1, name: 'garry' },
         { id: 2, name: 'larry' }
       ];
-      const props = ValidSchema.sheep.properties;
-      const result = mapSchemaToFormInputs(props, data);
+      const result = mapSchemaToFormInputs(this.schema, data);
 
       result.must.be.an.array();
       result[0].must.be.an.object();
@@ -59,40 +62,35 @@ describe('./lib/transformers/schema', function() {
 
     it('must not return type = string', function() {
       const data = { id: 1 };
-      const props = ValidSchema.sheep.properties;
-      const result = mapSchemaToFormInputs(props, data);
+      const result = mapSchemaToFormInputs(this.schema, data);
 
       result[0].id.type.must.not.eql('string');
     });
 
     it('must return type = string as type = text', function() {
       const data = { id: 1 };
-      const props = ValidSchema.sheep.properties;
-      const result = mapSchemaToFormInputs(props, data);
+      const result = mapSchemaToFormInputs(this.schema, data);
 
       result[0].id.type.must.eql('text');
     });
 
     it('must not return faker property', function() {
       const data = { id: 1 };
-      const props = ValidSchema.sheep.properties;
-      const result = mapSchemaToFormInputs(props, data);
+      const result = mapSchemaToFormInputs(this.schema, data);
 
       result[0].must.not.have.property('faker');
     });
 
     it('must return value property', function() {
       const data = { id: 1 };
-      const props = ValidSchema.sheep.properties;
-      const result = mapSchemaToFormInputs(props, data);
+      const result = mapSchemaToFormInputs(this.schema, data);
 
       result[0].id.value.must.be(1);
     });
 
     it('must not return value property if undefined', function() {
       const data = { id: 1, name: undefined };
-      const props = ValidSchema.sheep.properties;
-      const result = mapSchemaToFormInputs(props, data);
+      const result = mapSchemaToFormInputs(this.schema, data);
 
       result[0].name.must.not.have.property('value');
     });
