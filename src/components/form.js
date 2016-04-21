@@ -6,8 +6,10 @@ const FormInput = createFactory(formInput);
 
 export default class Form extends Component {
   render() {
-    return DOM.form(null,
-      map(this.props.children, ({ type, value = null }, key) => {
+    const { children, onSubmit } = this.props;
+
+    return DOM.form({ onSubmit },
+      map(children, ({ type, value = null }, key) => {
         return FormInput({
           id: key,
           name: key,
@@ -18,4 +20,12 @@ export default class Form extends Component {
       })
     );
   }
+};
+
+Form.propTypes = {
+  onSubmit: PropTypes.func
+};
+
+Form.defaultProps = {
+  onSubmit: function() {}
 };
