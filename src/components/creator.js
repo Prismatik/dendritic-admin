@@ -1,8 +1,7 @@
 import { form2js } from 'form2js';
-import React, { createFactory, PropTypes } from 'react';
-import formInput from './form_input';
-
-const FormInput = createFactory(formInput);
+import React, { createElement, createFactory, PropTypes } from 'react';
+import { mapSchemaToFormInputs } from '../lib/transformers/schema';
+import Form from './form';
 
 module.exports = React.createClass({
   displayName: 'Creator',
@@ -16,41 +15,6 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return { createButtonText: 'Create' };
-  },
-
-  calculateInputs: function(properties, lineage, required) {
-    if (!lineage) lineage = [];
-    const parent = lineage[lineage.length - 1];
-    const key = parent || this.props.name;
-
-    const inputs =  Object.keys(properties).reduce((r, prop) => {
-      const property = properties[prop];
-      if (property.type === 'object') {
-        const newLineage = JSON.parse(JSON.stringify(lineage));
-        newLineage.push(prop);
-        r.push(this.calculateInputs(property.properties, newLineage, property.required));
-        return r;
-      }
-
-      const numberish = (property.type === 'number' || property.type === 'integer');
-      const type = numberish ? 'number' : 'text';
-      const isRequired = required && (required.indexOf(prop) > -1);
-      const fullName = lineage.length ? lineage.join('.')+'.'+prop : prop;
-      r.push(FormInput({
-        id: prop,
-        key: prop + 'input',
-        type: type,
-        required: isRequired,
-        name: fullName
-      }));
-
-      return r;
-    }, []);
-    return React.DOM.div(
-      { key: key+'fieldset' },
-      React.DOM.h5({ key: key+'legend' }, 'Create new ' + key),
-      inputs
-    );
   },
 
   postData: function(data) {
@@ -87,21 +51,10 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    const fieldsets = this.calculateInputs(this.props.schema.properties, null, this.props.schema.required);
-
-    const form = this.state.creationFormVisible ? React.DOM.form(
-      {
-        key: this.props.name+'creator',
-        onSubmit: this.submissionHandler
-      },
-      fieldsets,
-      FormInput({
-        type: 'submit',
-        key: this.props.name+'submit',
-        text: 'Submit',
-        className: 'waves-effect waves-light btn cyan'
-      })
-    ) : null;
+    const inputs = mapSchemaToFormInputs(this.props.schema);
+    const form = this.state.creationFormVisible
+      ? createElement(Form, { onSubmit: this.submissionHandler }, inputs)
+      : null;
 
     return React.DOM.div(
       { key: this.props.name+'creatorContainer' },

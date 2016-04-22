@@ -25,6 +25,8 @@ export function mapSchemaToFormInputs(schema: { required: [] }, data) {
     return [key, _(parsed).omit('faker').omitBy(isUndefined).value()];
   };
 
+  data = data || Object.keys(schemaProps);
+
   return head(mapSchema(schemaProps, data, iterator));
 }
 

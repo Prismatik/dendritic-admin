@@ -6,14 +6,31 @@ const FormInput = createFactory(formInput);
 
 export default class Form extends Component {
   render() {
-    return DOM.form(null, map(this.props.children, (field, key) => {
-      return FormInput({
-        id: key,
-        name: key,
-        defaultValue: field.value,
-        type: field.type,
-        key
-      });
-    }));
+    const { children, onSubmit } = this.props;
+
+    return DOM.form({ onSubmit },
+      map(children, ({ type, value = null }, key) => {
+        return FormInput({
+          id: key,
+          name: key,
+          defaultValue: value,
+          type,
+          key
+        });
+      }),
+      FormInput({
+        type: 'submit',
+        text: 'Submit',
+        className: 'waves-effect waves-light btn cyan'
+      })
+    );
   }
+};
+
+Form.propTypes = {
+  onSubmit: PropTypes.func
+};
+
+Form.defaultProps = {
+  onSubmit: function() {}
 };
