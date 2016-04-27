@@ -1,16 +1,17 @@
 import { find, forEach, fromPairs } from 'lodash';
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import IO from 'socket.io-client';
 
 export default function listener(opts) {
   return function ListeningComponent(ComposedComponent) {
-    return class SocketListener extends Component {
+    class SocketListener extends Component {
       constructor(props) {
         super(props);
         this.state = { sockets: [] };
       }
 
       componentWillMount() {
+        const { getState, dispatch } = this.context.store;
         const sockets = opts(this.props);
         const connected = fromPairs(sockets.map(s => {
           return [s.host, IO(s.host)];
@@ -20,7 +21,7 @@ export default function listener(opts) {
           const found = find(sockets, { host });
 
           found.events.forEach(event => {
-            socket.on(event.name, event.handler);
+            socket.on(event.name, event.handler.bind(null, getState, dispatch));
           });
         });
 
@@ -35,5 +36,11 @@ export default function listener(opts) {
         forEach(this.state.sockets, socket => socket.disconnect());
       }
     };
+
+    SocketListener.contextTypes = {
+      store: PropTypes.object
+    };
+
+    return SocketListener;
   };
 };
