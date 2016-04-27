@@ -4,7 +4,7 @@ import { createAction } from 'redux-actions';
 export const getCollectionsSuccess = createAction('GET_COLLECTIONS_SUCCESS');
 export const addToCollection = createAction('ADD_TO_COLLECTION');
 export const removeFromCollection = createAction('REMOVE_FROM_COLLECTION');
-export const updateCollectionSocketStatus = createAction('UPDATE_COLLECTION_SOCKET_STATUS');
+export const updateDocumentChangefeedState = createAction('UPDATE_DOCUMENT_CHANGEFEED_STATE');
 
 // async actions
 export const postToCollection = createAsyncAction('ADD_TO_COLLECTION',
@@ -32,7 +32,7 @@ function createAsyncAction(type, handle) {
 
       return handle(payload)
         .then(response => dispatch({ type, payload, response }))
-        .catch(response => dispatch({type: `${type}_FAILED`, payload, error: response.data }));
+        .catch(response => dispatch({ type: `${type}_FAILED`, payload, error: response.data }));
     };
   };
 }

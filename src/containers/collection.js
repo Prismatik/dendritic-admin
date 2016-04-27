@@ -11,7 +11,7 @@ const Table = createFactory(table);
 export class Collection extends Component {
   static sanitizeData(data) {
     return toArray(reduce(data, (result, value, key) => {
-      if (value.socket.state === 'ready') result[key] = omit(value, 'socket');
+      if (value.changefeed.state === 'ready') result[key] = omit(value, 'changefeed');
       return result;
     }, {}));
   }

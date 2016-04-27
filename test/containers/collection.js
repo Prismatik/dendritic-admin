@@ -19,26 +19,26 @@ describe('./containers/collection', function() {
   describe('Collection', function() {
     describe('static.sanitizeData', function() {
       it('must not return items that are not state = ready', function() {
-        const notReady = { id: 1, name: 'garry', socket: { state: 'initializing' } };
-        const ready = { id: 2, name: 'larry', socket: { state: 'ready' } };
+        const notReady = { id: 1, name: 'garry', changefeed: { state: 'initializing' } };
+        const ready = { id: 2, name: 'larry', changefeed: { state: 'ready' } };
         const sanitized = Collection.sanitizeData([ready, notReady]);
 
         sanitized.must.not.include(notReady);
       });
 
       it('must only return items that are state = ready', function() {
-        const notReady = { id: 1, name: 'garry', socket: { state: 'initializing' } };
-        const ready = { id: 2, name: 'larry', socket: { state: 'ready' } };
+        const notReady = { id: 1, name: 'garry', changefeed: { state: 'initializing' } };
+        const ready = { id: 2, name: 'larry', changefeed: { state: 'ready' } };
         const sanitized = Collection.sanitizeData([ready, notReady]);
 
         sanitized.must.eql([{ id: 2, name: 'larry' }]);
       });
 
-      it('must remove socket property state = ready items', function() {
-        const ready = { id: 1, name: 'garry', socket: { state: 'ready' } };
+      it('must remove changefeed property state = ready items', function() {
+        const ready = { id: 1, name: 'garry', changefeed: { state: 'ready' } };
         const sanitized = Collection.sanitizeData([ready]);
 
-        sanitized[0].must.not.have.property('socket');
+        sanitized[0].must.not.have.property('changefeed');
       });
     });
 
