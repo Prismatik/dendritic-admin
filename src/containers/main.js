@@ -69,18 +69,18 @@ function recordEvent(collection, host, getState, dispatch, data) {
   const { api } = getState();
   const item = data.new_val;
 
-  // If API returns an old version, remove it before the new one is
-  // added.
   if (data.old_val) {
     dispatch(removeFromCollection({ item, collection }));
   }
 
-  dispatch(addToCollection({
-    schema: api.schema[collection],
-    status: api.changefeeds[host].state,
-    item,
-    collection
-  }));
+  if (data.new_val) {
+    dispatch(addToCollection({
+      schema: api.schema[collection],
+      status: api.changefeeds[host].state,
+      item,
+      collection
+    }));
+  }
 }
 
 function stateEvent(collection, host, getState, dispatch, data) {
