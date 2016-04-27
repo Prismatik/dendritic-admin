@@ -12,6 +12,17 @@ export const api = handleActions({
       changefeeds: fromPairs(map(action.payload, iterator))
     };
   },
+  'UPDATE_API_CHANGEFEED_STATE': (state, action) => {
+    const { status, host } = action.payload;
+
+    return {
+      ...state,
+      changefeeds: {
+        ...state.changefeeds,
+        [host]: { state: status }
+      }
+    };
+  }
 }, {
   url: '',
   schema: {},
