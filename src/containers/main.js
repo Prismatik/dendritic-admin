@@ -5,12 +5,15 @@ import { resolve } from 'react-resolver';
 import header from '../components/header';
 import nav from '../components/nav';
 import listener from '../components/socket_listener';
-import { getApiSuccess } from '../redux/actions/api';
+import {
+  getApiSuccess,
+  updateApiChangefeedState
+} from '../redux/actions/api';
 import {
   getCollectionsSuccess,
   addToCollection,
   removeFromCollection,
-  updateCollectionSocketStatus
+  updateDocumentChangefeedState
 } from '../redux/actions/collections';
 
 const Header = createFactory(header);
@@ -62,40 +65,43 @@ const Resolved = resolve('init', ({ api, dispatch }) => {
     });
 });
 
-const SocketListener = listener(({ api, collections, dispatch }) => {
+function recordEvent(collection, host, getState, dispatch, data) {
+  const { api } = getState();
+  const item = data.new_val;
+
+  // If API returns an old version, remove it before the new one is
+  // added.
+  if (data.old_val) {
+    dispatch(removeFromCollection({ item, collection }));
+  }
+
+  dispatch(addToCollection({
+    schema: api.schema[collection],
+    status: api.changefeeds[host].state,
+    item,
+    collection
+  }));
+}
+
+function stateEvent(collection, host, getState, dispatch, data) {
+  if (data.state === 'ready') {
+    dispatch(updateApiChangefeedState({ status: data.state, host }));
+    dispatch(updateDocumentChangefeedState({ status: data.state, collection }));
+  }
+}
+
+const SocketListener = listener(({ api: { url, schema }, collections }) => {
   return Object.keys(collections).map(collection => {
-    const { pluralName } = api.schema[collection];
-    const host = `${api.url}/${pluralName}`;
+    const host = `${url}/${schema[collection].pluralName}`;
 
     return {
       host: host,
       events: [{
         name: 'record',
-        handler: function(data) {
-          const item = data.new_val;
-
-          // If API returns an old version, remove it before the new one is
-          // added.
-          if (data.old_val) {
-            dispatch(removeFromCollection({ item, collection }));
-          }
-
-          dispatch(addToCollection({
-            schema: api.schema[collection],
-            item,
-            collection
-          }));
-        }
+        handler: recordEvent.bind(null, collection, host)
       }, {
         name: 'state',
-        handler: function(data) {
-          if (data.state === 'ready') {
-            dispatch(updateCollectionSocketStatus({
-              status: data.state,
-              collection
-            }));
-          }
-        }
+        handler: stateEvent.bind(null, collection, host)
       }]
     };
   });
