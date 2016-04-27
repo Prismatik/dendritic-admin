@@ -1,6 +1,6 @@
 import { api } from 'root/src/redux/reducers/api';
 import { ValidSchema } from 'root/test/fixtures/valid_schema';
-import ValidState, { changefeeds, url } from 'root/test/fixtures/valid_state';
+import ValidState, { url } from 'root/test/fixtures/valid_state';
 
 describe('./redux/reducers/api', function() {
   describe('GET_API_SUCCESS', function() {
@@ -28,7 +28,10 @@ describe('./redux/reducers/api', function() {
 
     it('must set changefeeds state', function() {
       const result = api(ValidState().api, this.action);
-      result.changefeeds.must.eql(changefeeds);
+      result.changefeeds.must.eql({
+        [`${url}/sheep`]: { state: 'initializing' },
+        [`${url}/wolves`]: { state: 'initializing' }
+      });
     });
   });
 
