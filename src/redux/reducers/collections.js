@@ -7,14 +7,14 @@ export const collections = handleActions({
     return fromPairs(action.payload.map(i => [i, {}]));
   },
   'ADD_TO_COLLECTION': (state, action) => {
-    const { item, schema, collection } = action.payload;
+    const { item, schema, collection, status } = action.payload;
     const transformed = head(mapSchemaToData(schema, item));
 
     return {
       ...state,
       [collection]: {
         ...state[collection],
-        [item.id]: { ...transformed, socket: { state: 'initializing' } }
+        [item.id]: { ...transformed, changefeed: { state: status } }
       }
     };
   },
@@ -26,13 +26,13 @@ export const collections = handleActions({
       [collection]: omitBy(state[collection], (val, key) => key == item.id)
     };
   },
-  'UPDATE_COLLECTION_SOCKET_STATUS': (state, action) => {
+  'UPDATE_DOCUMENT_CHANGEFEED_STATE': (state, action) => {
     const { status, collection } = action.payload;
 
     return {
       ...state,
       [collection]: mapValues(state[collection], o => {
-        if (o.socket && o.socket.state) o.socket.state = status;
+        if (o.changefeed && o.changefeed.state) o.changefeed.state = status;
         return o;
       })
     };

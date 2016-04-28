@@ -47,7 +47,8 @@ describe('./redux/reducers/collections', function() {
       this.action.payload = {
         ...this.action.payload,
         collection: 'wolf',
-        item: { id: 3, name: 'larry', sheep: 1 }
+        item: { id: 3, name: 'larry', sheep: 1 },
+        status: 'initializing'
       };
 
       const result = collections(initialState, this.action);
@@ -55,7 +56,7 @@ describe('./redux/reducers/collections', function() {
         id: 3,
         name: 'larry',
         sheep: '/sheep/1',
-        socket: { state: 'initializing' }
+        changefeed: { state: 'initializing' }
       });
     });
   });
@@ -87,14 +88,14 @@ describe('./redux/reducers/collections', function() {
     });
   });
 
-  describe('UPDATE_COLLECTION_SOCKET_STATUS', function() {
+  describe('UPDATE_DOCUMENT_CHANGEFEED_STATE', function() {
     beforeEach(function() {
-       this.action = { type: 'UPDATE_COLLECTION_SOCKET_STATUS' };
+       this.action = { type: 'UPDATE_DOCUMENT_CHANGEFEED_STATE' };
     });
 
     it('must not leave documents with initializing state', function() {
       let state = cloneDeep(initialState);
-      state.sheep['1'].socket = { state: 'initializing' };
+      state.sheep['1'].changefeed = { state: 'initializing' };
 
       this.action.payload = {
         collection: 'sheep',
@@ -102,12 +103,12 @@ describe('./redux/reducers/collections', function() {
       };
 
       const result = collections(state, this.action);
-      result.sheep['1'].socket.state.must.not.be('initializing');
+      result.sheep['1'].changefeed.state.must.not.be('initializing');
     });
 
     it('must update collection with socket state', function() {
       let state = cloneDeep(initialState);
-      state.sheep['1'].socket = { state: 'initializing' };
+      state.sheep['1'].changefeed = { state: 'initializing' };
 
       this.action.payload = {
         collection: 'sheep',
@@ -115,7 +116,7 @@ describe('./redux/reducers/collections', function() {
       };
 
       const result = collections(state, this.action);
-      result.sheep['1'].socket.state.must.be('ready');
+      result.sheep['1'].changefeed.state.must.be('ready');
     });
   });
 });

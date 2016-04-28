@@ -3,7 +3,7 @@ import config from '../../config';
 
 const api = () => {
   return axios.create({ baseURL: config.apiUrl });
-}
+};
 
 'get post put delete'.split(/\s+/).forEach(method => {
   exports[method] = (path, params) => {
