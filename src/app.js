@@ -1,7 +1,7 @@
 import React, { createElement } from 'react';
 import DOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, hashHistory } from 'react-router';
+import { Router, hashHistory as history } from 'react-router';
 import main from './containers/main';
 import css from './css/style.css';
 import configureStore, { reducer } from './redux/store';
@@ -19,6 +19,6 @@ const store = configureStore(reducer, { api: { url: localStorage.apiUrl } });
 
 DOM.render((
   createElement(Provider, { store },
-    createElement(Router, { history: hashHistory, routes })
+    createElement(Router, { history, routes })
   )
 ), document.getElementById('app'));
