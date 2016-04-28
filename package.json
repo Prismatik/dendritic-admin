@@ -6,7 +6,7 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development webpack-dev-server --hot --inline",
-    "test": "npm run cover",
+    "test": "./node_modules/.bin/_mocha",
     "autotest": "./node_modules/.bin/_mocha --watch",
     "lint": "node_modules/.bin/jscs src test",
     "cover": "./node_modules/.bin/istanbul cover --root ./src ./node_modules/.bin/_mocha",
