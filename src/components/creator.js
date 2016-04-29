@@ -1,5 +1,6 @@
 import { form2js } from 'form2js';
 import React, { createElement, createFactory, PropTypes } from 'react';
+import * as api from '../lib/api';
 import { mapSchemaToFormInputs } from '../lib/transformers/schema';
 import Form from './form';
 
@@ -17,17 +18,6 @@ module.exports = React.createClass({
     return { createButtonText: 'Create' };
   },
 
-  postData: function(data) {
-    fetch(this.props.apiUrl+'/'+this.props.pluralName, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-  },
-
   handleNumbers: function(node) {
     if (node.nodeName === 'INPUT' && node.type === 'number') {
       const val = parseInt(node.value);
@@ -40,8 +30,9 @@ module.exports = React.createClass({
   submissionHandler: function(e) {
     e.preventDefault();
     const data = form2js(e.target, '.', true, this.handleNumbers);
+
     // FIXME check this data against the schema
-    this.postData(data);
+    api.post(this.props.pluralName, data);
   },
 
   toggleCreationForm: function() {
