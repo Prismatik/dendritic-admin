@@ -1,16 +1,20 @@
-import React, { createFactory, DOM } from 'react';
-import action from './action';
+import { capitalize } from 'lodash';
+import React, { createElement, DOM } from 'react';
+import Action from './action';
+import Nav from './nav';
 
-const Action = createFactory(action);
+export default function Header({ collections }) {
+  const home = [{ path: '/', name: 'Home' }];
+  const navItems = home.concat(collections.map(item => ({
+    path: `/collections/${item}`,
+    name: capitalize(item)
+  })));
 
-export default function Header() {
   return DOM.header({ className: 'red lighten-1' },
     DOM.div({ className: 'row' },
       DOM.div({ className: 'col s12' },
         DOM.div({ className: 'container' },
-          DOM.h3({ className: 'white-text' },
-            Action({ path: '/', className: 'white-text' }, 'Redbeard Admin')
-          )
+          createElement(Nav, { items: navItems })
         )
       )
     )
