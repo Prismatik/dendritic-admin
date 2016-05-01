@@ -1,9 +1,9 @@
 import { capitalize } from 'lodash';
-import React, { createElement, DOM } from 'react';
+import React, { createElement, DOM, PropTypes } from 'react';
 import Action from './action';
 import Nav from './nav';
 
-export default function Header({ collections }) {
+function Header({ collections }) {
   const home = [{ path: '/', name: 'Home' }];
   const navItems = home.concat(collections.map(item => ({
     path: `/collections/${item}`,
@@ -20,3 +20,13 @@ export default function Header({ collections }) {
     )
   );
 };
+
+Header.propTypes = {
+  collections: PropTypes.array
+};
+
+Header.defaultProps = {
+  collections: []
+};
+
+export default Header;
