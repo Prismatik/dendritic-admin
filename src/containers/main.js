@@ -27,16 +27,11 @@ export class Main extends Component {
     } = this.props;
 
     return DOM.div(null,
-      Header(),
+      Header({ collections: Object.keys(collections) }),
       DOM.main(null,
         DOM.div({ className: 'row' },
           DOM.div({ className: 'container' },
-            DOM.div({ className: 'col s12 l2' },
-              Nav({ items: Object.keys(collections) })
-            ),
-            DOM.div({ className: 'col s12 l10' },
-              children
-            )
+            DOM.div({ className: 'col s12' }, children)
           )
         )
       )

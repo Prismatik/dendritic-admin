@@ -1,5 +1,9 @@
 @import url(https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css);
 
+nav {
+  box-shadow: none;
+}
+
 /* label color */
 .input-field label {
   color: #D50000;
