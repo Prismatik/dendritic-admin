@@ -2,16 +2,10 @@ import React from 'react';
 import Form from 'root/src/components/form';
 import FormInput from 'root/src/components/form_input';
 import { shallowComponent } from 'root/test/react_utils';
-import ValidState from 'root/test/fixtures/valid_state';
-
-const state = ValidState();
-const { api } = state;
 
 describe('./components/form', function() {
   describe('.render', function() {
     it('must render correctly', function() {
-      const schema = api.schema.sheep;
-
       const el = <Form>
         {{
           id: { type: 'text', value: 123 },
@@ -19,7 +13,7 @@ describe('./components/form', function() {
         }}
       </Form>;
 
-      const expected = <form onSubmit={function() {}}>
+      const rendered = <form onSubmit={function() {}}>
         <FormInput
           defaultValue={123}
           id='id'
@@ -39,7 +33,7 @@ describe('./components/form', function() {
         />
       </form>;
 
-      shallowComponent(el).must.be.jsx(expected);
+      shallowComponent(el).must.be.jsx(rendered);
     });
   });
 });
