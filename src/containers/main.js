@@ -5,6 +5,7 @@ import { resolve } from 'react-resolver';
 import header from '../components/header';
 import nav from '../components/nav';
 import listener from '../components/socket_listener';
+import * as api from '../lib/api';
 import {
   getApiSuccess,
   updateApiChangefeedState
@@ -49,15 +50,13 @@ const Connected = connect(state => ({
   collections: state.collections
 }));
 
-const Resolved = resolve('init', ({ api, dispatch }) => {
-  if (api.schema) return;
+const Resolved = resolve('init', ({ api: stateApi, dispatch }) => {
+  if (stateApi.schema) return;
 
-  return fetch(api.url + '/schema')
-    .then(res => res.json())
-    .then(json => {
-      dispatch(getApiSuccess(json));
-      dispatch(getCollectionsSuccess(Object.keys(json)));
-    });
+  return api.get('/schema').then(json => {
+    dispatch(getApiSuccess(json));
+    dispatch(getCollectionsSuccess(Object.keys(json)));
+  });
 });
 
 function recordEvent(collection, host, getState, dispatch, data) {
