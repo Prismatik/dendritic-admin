@@ -44,7 +44,7 @@ module.exports = React.createClass({
   render: function() {
     const inputs = mapSchemaToFormInputs(this.props.schema);
     const form = this.state.creationFormVisible
-      ? createElement(Form, { onSubmit: this.submissionHandler }, inputs)
+      ? createElement(Form, { inputs, onSubmit: this.submissionHandler })
       : null;
 
     return React.DOM.div(
