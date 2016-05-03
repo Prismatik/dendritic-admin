@@ -1,9 +1,11 @@
-import { isEqual, omit, reduce, toArray } from 'lodash';
-import React, { Component, createFactory, DOM, PropTypes } from 'react';
+import { isEqual, isString, isUndefined, omit, reduce, toArray } from 'lodash';
+import React, { Component, createFactory, createElement, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Action from '../components/action';
 import creator from '../components/creator';
 import table from '../components/table';
 import { extractHeaders } from '../lib/transformers/schema';
+import { isUUID } from '../lib/validation';
 
 const Creator = createFactory(creator);
 const Table = createFactory(table);
@@ -14,6 +16,21 @@ export class Collection extends Component {
       if (value.changefeed.state === 'ready') result[key] = omit(value, 'changefeed');
       return result;
     }, {}));
+  }
+
+  static iterator(collection, val) {
+    const action = (path, data) => {
+      const opts = { className: 'red-text text-accent-4', path };
+      return createElement(Action, opts, data);
+    };
+
+    if (!isUndefined(val) && isUUID(val))
+      return action(`/collections/${collection}/${val}`, val);
+
+    if (isString(val) && val.match(/^\//))
+      return action(`/collections${val}`, val);
+
+    return val;
   }
 
   shouldComponentUpdate({ data }) {
@@ -32,12 +49,15 @@ export class Collection extends Component {
         schema
       }),
       Table({
-        name: schema.pluralName,
+        name: schema.name,
         headers: extractHeaders(schema.properties),
+        iterator: Collection.iterator.bind(this, schema.name),
         data
       })
     );
   }
+
+
 }
 
 Collection.propTypes = {

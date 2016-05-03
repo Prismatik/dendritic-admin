@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Creator from 'root/src/components/creator';
 import Table from 'root/src/components/table';
 import { Collection, mapStateToProps } from 'root/src/containers/collection';
@@ -42,6 +43,36 @@ describe('./containers/collection', function() {
       });
     });
 
+    describe('static.iterator', function() {
+      it('must return link if supplied UUID', function() {
+        const UUID = '12429635-4c0e-43fb-be41-6fd7aeb89405';
+        const el = Collection.iterator('socks', UUID);
+        const rendered = <Link
+          className='red-text text-accent-4'
+          onlyActiveOnIndex={false}
+          style={{}}
+          to={`/collections/socks/${UUID}`}>
+          {UUID}
+        </Link>;
+
+        shallowComponent(el).must.be.jsx(rendered);
+      });
+
+      it('must render link if supplied URL looking string', function() {
+        const url = '/over/here/garry';
+        const el = Collection.iterator('socks', url);
+        const rendered = <Link
+          className='red-text text-accent-4'
+          onlyActiveOnIndex={false}
+          style={{}}
+          to={`/collections${url}`}>
+          {url}
+        </Link>;
+
+        shallowComponent(el).must.be.jsx(rendered);
+      });
+    });
+
     describe('.render', function() {
       it('must render correctly', function() {
         const schema = this.schema.sheep;
@@ -64,6 +95,7 @@ describe('./containers/collection', function() {
             data={data}
             headers={extractHeaders(schema.properties)}
             name={schema.pluralName}
+            iterator={function(){}}
           />
         </div>;
 
