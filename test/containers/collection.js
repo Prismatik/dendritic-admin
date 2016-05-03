@@ -7,16 +7,10 @@ import { extractHeaders } from 'root/src/lib/transformers/schema';
 import { shallowComponent } from 'root/test/react_utils';
 import ValidState from 'root/test/fixtures/valid_state';
 
+const state = ValidState();
+const { api: { url: apiUrl, schema } } = state;
+
 describe('./containers/collection', function() {
-  before(function() {
-    const state = ValidState();
-    const { api: { url, schema } } = state;
-
-    this.state = state;
-    this.apiUrl = url;
-    this.schema = schema;
-  });
-
   describe('Collection', function() {
     describe('static.sanitizeData', function() {
       it('must not return items that are not state = ready', function() {
@@ -45,28 +39,28 @@ describe('./containers/collection', function() {
 
     describe('static.iterator', function() {
       it('must return link if supplied UUID', function() {
-        const UUID = '12429635-4c0e-43fb-be41-6fd7aeb89405';
-        const el = Collection.iterator('socks', UUID);
+        const data = '12429635-4c0e-43fb-be41-6fd7aeb89405';
+        const el = Collection.iterator('socks', data);
         const rendered = <Link
           className='red-text text-accent-4'
           onlyActiveOnIndex={false}
           style={{}}
-          to={`/collections/socks/${UUID}`}>
-          {UUID}
+          to={`/collections/socks/${data}`}>
+          {data}
         </Link>;
 
         shallowComponent(el).must.be.jsx(rendered);
       });
 
       it('must render link if supplied URL looking string', function() {
-        const url = '/over/here/garry';
-        const el = Collection.iterator('socks', url);
+        const data = '/over/here/garry';
+        const el = Collection.iterator('socks', data);
         const rendered = <Link
           className='red-text text-accent-4'
           onlyActiveOnIndex={false}
           style={{}}
-          to={`/collections${url}`}>
-          {url}
+          to={`/collections${data}`}>
+          {data}
         </Link>;
 
         shallowComponent(el).must.be.jsx(rendered);
@@ -75,26 +69,25 @@ describe('./containers/collection', function() {
 
     describe('.render', function() {
       it('must render correctly', function() {
-        const schema = this.schema.sheep;
         const data = [];
 
         const el = <Collection
-          schema={schema}
-          apiUrl={this.apiUrl}
+          schema={schema.sheep}
+          apiUrl={apiUrl}
           data={data}
         />;
 
         const expected = <div className='section'>
           <Creator
-            apiUrl={this.apiUrl}
-            name={schema.name}
-            pluralName={schema.pluralName}
-            schema={schema}
+            apiUrl={apiUrl}
+            name={schema.sheep.name}
+            pluralName={schema.sheep.pluralName}
+            schema={schema.sheep}
           />
           <Table
             data={data}
-            headers={extractHeaders(schema.properties)}
-            name={schema.pluralName}
+            headers={extractHeaders(schema.sheep.properties)}
+            name={schema.sheep.pluralName}
             iterator={function(){}}
           />
         </div>;
@@ -106,8 +99,8 @@ describe('./containers/collection', function() {
 
   describe('.mapStateToProps', function() {
     it('must return correct props from state', function() {
-      const props = { params: { name: this.schema.sheep.name } };
-      const mapped = mapStateToProps(this.state, props);
+      const props = { params: { name: schema.sheep.name } };
+      const mapped = mapStateToProps(state, props);
       mapped.must.have.keys(['schema', 'apiUrl', 'data']);
     });
   });
