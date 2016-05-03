@@ -1,14 +1,11 @@
 import { isEqual, isString, isUndefined, omit, reduce, toArray } from 'lodash';
-import React, { Component, createFactory, createElement, DOM, PropTypes } from 'react';
+import React, { Component, createElement, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Action from '../components/action';
-import creator from '../components/creator';
-import table from '../components/table';
+import Creator from '../components/creator';
+import Table from '../components/table';
 import { extractHeaders } from '../lib/transformers/schema';
 import { isUUID } from '../lib/validation';
-
-const Creator = createFactory(creator);
-const Table = createFactory(table);
 
 export class Collection extends Component {
   static sanitizeData(data) {
@@ -42,13 +39,13 @@ export class Collection extends Component {
     const { schema, apiUrl, data } = this.props;
 
     return DOM.div({ className: 'section' },
-      Creator({
+      createElement(Creator, {
         name: schema.name,
         pluralName: schema.pluralName,
         apiUrl,
         schema
       }),
-      Table({
+      createElement(Table, {
         name: schema.name,
         headers: extractHeaders(schema.properties),
         iterator: Collection.iterator.bind(this, schema.name),
@@ -56,8 +53,6 @@ export class Collection extends Component {
       })
     );
   }
-
-
 }
 
 Collection.propTypes = {
