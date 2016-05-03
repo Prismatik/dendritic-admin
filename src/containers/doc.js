@@ -1,22 +1,32 @@
-import React, { Component, createFactory, DOM, PropTypes } from 'react';
+import { isEqual } from 'lodash';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import form from '../components/form';
+import Form from '../components/form';
 import { mapSchemaToFormInputs } from '../lib/transformers/schema';
 
-const Form = createFactory(form);
+export class Doc extends React.Component {
+  shouldComponentUpdate({ doc }) {
+    if (!isEqual(doc, this.props.doc)) return true;
+    return false;
+  }
 
-export class Doc extends Component {
   render() {
-    const { schemaProps, doc } = this.props;
-    const inputs = mapSchemaToFormInputs(schemaProps, doc);
+    const { schema, doc } = this.props;
 
-    return DOM.div({ className: 'section' }, Form(null, inputs));
+    return <div className='section'>
+      <Form inputs={mapSchemaToFormInputs(schema, doc)} />
+    </div>;
   }
 }
 
-const Connected = connect((state, { params }) => ({
-  schemaProps: state.api.schema[params.name].properties,
-  doc: state.collections[params.name][params.id]
-}));
+Doc.propTypes = {
+  schema: PropTypes.object.isRequired,
+  doc: PropTypes.object
+};
 
-export default Connected(Doc);
+export const mapStateToProps = (state, { params: { name, id } }) => ({
+  schema: state.api.schema[name],
+  doc: state.collections[name][id]
+});
+
+export default connect(mapStateToProps)(Doc);
