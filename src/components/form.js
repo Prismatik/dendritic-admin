@@ -6,10 +6,10 @@ const FormInput = createFactory(formInput);
 
 export default class Form extends Component {
   render() {
-    const { children, onSubmit } = this.props;
+    const { inputs, onSubmit } = this.props;
 
     return DOM.form({ onSubmit },
-      map(children, ({ type, value = null }, key) => {
+      map(inputs, ({ type, value = null }, key) => {
         return FormInput({
           id: key,
           name: key,
@@ -28,6 +28,7 @@ export default class Form extends Component {
 };
 
 Form.propTypes = {
+  inputs: PropTypes.object.isRequired,
   onSubmit: PropTypes.func
 };
 

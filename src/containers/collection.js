@@ -1,12 +1,11 @@
-import { isEqual, omit, reduce, toArray } from 'lodash';
-import React, { Component, createFactory, DOM, PropTypes } from 'react';
+import { isEqual, isString, isUndefined, omit, reduce, toArray } from 'lodash';
+import React, { Component, createElement, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import creator from '../components/creator';
-import table from '../components/table';
+import Action from '../components/action';
+import Creator from '../components/creator';
+import Table from '../components/table';
 import { extractHeaders } from '../lib/transformers/schema';
-
-const Creator = createFactory(creator);
-const Table = createFactory(table);
+import { isUUID } from '../lib/validation';
 
 export class Collection extends Component {
   static sanitizeData(data) {
@@ -14,6 +13,23 @@ export class Collection extends Component {
       if (value.changefeed.state === 'ready') result[key] = omit(value, 'changefeed');
       return result;
     }, {}));
+  }
+
+  static iterator(collection, val) {
+    const action = (path, data) => {
+      const opts = { className: 'red-text text-accent-4', path };
+      return createElement(Action, opts, data);
+    };
+
+    if (!isUndefined(val)) {
+      if (isUUID(val))
+        return action(`/collections/${collection}/${val}`, val);
+
+      if (isString(val) && val.match(/^\//))
+        return action(`/collections${val}`, val);
+    }
+
+    return val;
   }
 
   shouldComponentUpdate({ data }) {
@@ -25,15 +41,16 @@ export class Collection extends Component {
     const { schema, apiUrl, data } = this.props;
 
     return DOM.div({ className: 'section' },
-      Creator({
+      createElement(Creator, {
         name: schema.name,
         pluralName: schema.pluralName,
         apiUrl,
         schema
       }),
-      Table({
-        name: schema.pluralName,
+      createElement(Table, {
+        name: schema.name,
         headers: extractHeaders(schema.properties),
+        iterator: Collection.iterator.bind(this, schema.name),
         data
       })
     );

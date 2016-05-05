@@ -6,12 +6,10 @@ import { shallowComponent } from 'root/test/react_utils';
 describe('./components/form', function() {
   describe('.render', function() {
     it('must render correctly', function() {
-      const el = <Form>
-        {{
-          id: { type: 'text', value: 123 },
-          name: { type: 'text', value: 'garry' }
-        }}
-      </Form>;
+      const el = <Form inputs={{
+        id: { type: 'text', value: 123 },
+        name: { type: 'text', value: 'garry' }
+      }} />;
 
       const rendered = <form onSubmit={function() {}}>
         <FormInput
