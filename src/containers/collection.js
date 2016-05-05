@@ -21,11 +21,13 @@ export class Collection extends Component {
       return createElement(Action, opts, data);
     };
 
-    if (!isUndefined(val) && isUUID(val))
-      return action(`/collections/${collection}/${val}`, val);
+    if (!isUndefined(val)) {
+      if (isUUID(val))
+        return action(`/collections/${collection}/${val}`, val);
 
-    if (isString(val) && val.match(/^\//))
-      return action(`/collections${val}`, val);
+      if (isString(val) && val.match(/^\//))
+        return action(`/collections${val}`, val);
+    }
 
     return val;
   }

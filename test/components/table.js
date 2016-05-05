@@ -1,4 +1,3 @@
-import { invert } from 'lodash';
 import React from 'react';
 import Table from 'root/src/components/table';
 import TableColumn from 'root/src/components/table_column';
