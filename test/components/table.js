@@ -1,9 +1,9 @@
 import React from 'react';
-import Table from 'root/src/components/table';
-import TableColumn from 'root/src/components/table_column';
-import TableHeaderColumn from 'root/src/components/table_header_column';
-import TableRow from 'root/src/components/table_row';
-import { shallowComponent } from 'root/test/react_utils';
+import Table from '../../src/components/table';
+import TableColumn from '../../src/components/table_column';
+import TableHeaderColumn from '../../src/components/table_header_column';
+import TableRow from '../../src/components/table_row';
+import { shallowComponent } from '../react_utils';
 
 describe('./components/table', function() {
   describe('.render', function() {

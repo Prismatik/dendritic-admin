@@ -1,8 +1,8 @@
 import React from 'react';
-import Form from 'root/src/components/form';
-import { Doc, mapStateToProps } from 'root/src/containers/doc';
-import { shallowComponent } from 'root/test/react_utils';
-import ValidState from 'root/test/fixtures/valid_state';
+import Form from '../../src/components/form';
+import { Doc, mapStateToProps } from '../../src/containers/doc';
+import { shallowComponent } from '../react_utils';
+import ValidState from '../fixtures/valid_state';
 
 const state = ValidState();
 const { api: { schema } } = state;

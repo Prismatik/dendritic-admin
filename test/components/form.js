@@ -1,7 +1,7 @@
 import React from 'react';
-import Form from 'root/src/components/form';
-import FormInput from 'root/src/components/form_input';
-import { shallowComponent } from 'root/test/react_utils';
+import Form from '../../src/components/form';
+import FormInput from '../../src/components/form_input';
+import { shallowComponent } from '../react_utils';
 
 describe('./components/form', function() {
   describe('.render', function() {

@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from 'root/src/components/header';
-import Nav from 'root/src/components/nav';
-import { shallowComponent } from 'root/test/react_utils';
+import Header from '../../src/components/header';
+import Nav from '../../src/components/nav';
+import { shallowComponent } from '../react_utils';
 
 describe('./components/header', function() {
   describe('.render', function() {

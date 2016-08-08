@@ -4,8 +4,8 @@ import {
   mapSchemaToFormInputs,
   extractHeaders,
   arrayToStr
-} from 'root/src/lib/transformers/schema';
-import { ValidSchema } from 'root/test/fixtures/valid_schema';
+} from '../../../src/lib/transformers/schema';
+import { ValidSchema } from '../../fixtures/valid_schema';
 
 describe('./lib/transformers/schema', function() {
   describe('.mapSchemaToData', function() {

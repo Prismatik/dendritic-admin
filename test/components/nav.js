@@ -1,8 +1,8 @@
 import React from 'react';
-import Action from 'root/src/components/action';
-import ListItem from 'root/src/components/list_item';
-import Nav from 'root/src/components/nav';
-import { shallowComponent } from 'root/test/react_utils';
+import Action from '../../src/components/action';
+import ListItem from '../../src/components/list_item';
+import Nav from '../../src/components/nav';
+import { shallowComponent } from '../react_utils';
 
 describe('./components/nav', function() {
   describe('.render', function() {

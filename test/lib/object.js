@@ -1,4 +1,4 @@
-import { deepFreeze } from 'root/src/lib/object';
+import { deepFreeze } from '../../src/lib/object';
 
 describe('./lib/object', function() {
   describe('.deepFreeze', function() {
