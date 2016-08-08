@@ -1,10 +1,11 @@
-import { fromPairs, head, mapValues, omitBy } from 'lodash';
+import { filter, fromPairs, head, mapValues, omitBy } from 'lodash';
 import { handleActions } from 'redux-actions';
 import { mapSchemaToData } from '../../lib/transformers/schema';
 
 export const collections = handleActions({
   'GET_COLLECTIONS_SUCCESS': (state, action) => {
-    return fromPairs(action.payload.map(i => [i, {}]));
+    const schemas = clean(action.payload);
+    return fromPairs(schemas.map(i => [i, {}]));
   },
   'ADD_TO_COLLECTION': (state, action) => {
     const { item, schema, collection, status } = action.payload;
@@ -38,3 +39,7 @@ export const collections = handleActions({
     };
   }
 }, {});
+
+function clean(schemas) {
+  return filter(schemas, item => item !== 'definitions');
+}
