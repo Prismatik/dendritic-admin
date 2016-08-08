@@ -1,11 +1,11 @@
 import { form2js } from 'form2js';
-import { isEqual } from 'lodash';
+import { isEqual, map } from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Form from '../components/form';
 import { mapSchemaToFormInputs } from '../lib/transformers/schema';
 import * as api from '../lib/api';
 import { handleNumbers } from '../lib/form2js';
+import { getByPlural } from '../lib/schema';
 
 export class Doc extends React.Component {
   shouldComponentUpdate({ doc }) {
@@ -27,10 +27,6 @@ export class Doc extends React.Component {
     const { schema, doc } = this.props;
 
     return <div className='section'>
-      <Form
-        inputs={mapSchemaToFormInputs(schema, doc)}
-        onSubmit={e => this.onSubmit(e)}
-      />
     </div>;
   }
 }
@@ -41,7 +37,7 @@ Doc.propTypes = {
 };
 
 export const mapStateToProps = (state, { params: { name, id } }) => ({
-  schema: state.api.schema[name],
+  schema: getByPlural(state.api.schema, name),
   doc: state.collections[name][id]
 });
 

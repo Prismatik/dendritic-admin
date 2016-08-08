@@ -6,6 +6,7 @@ import header from '../components/header';
 import nav from '../components/nav';
 import listener from '../components/socket_listener';
 import * as api from '../lib/api';
+import { getByPlural } from '../lib/schema';
 import {
   getApiSuccess,
   updateApiChangefeedState
@@ -79,7 +80,7 @@ function create(collection, host, getState, dispatch, data) {
   const { api } = getState();
 
   dispatch(addToCollection({
-    schema: api.schema[collection],
+    schema: getByPlural(api.schema, collection),
     status: api.changefeeds[host].state,
     item: data,
     collection
@@ -91,9 +92,9 @@ function stateEvent(collection, host, getState, dispatch, data) {
   dispatch(updateDocumentChangefeedState({ status: 'ready', collection }));
 }
 
-const SocketListener = listener(({ api: { url, schema }, collections }) => {
+const SocketListener = listener(({ api: { url }, collections }) => {
   return Object.keys(collections).map(collection => {
-    const host = `${url}/${schema[collection].pluralName}`;
+    const host = `${url}/${collection}`;
 
     return {
       host: host,
