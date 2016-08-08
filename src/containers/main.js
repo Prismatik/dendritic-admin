@@ -1,4 +1,4 @@
-import { flow } from 'lodash';
+import { filter, flow, map } from 'lodash';
 import React, { Component, createFactory, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { resolve } from 'react-resolver';
@@ -54,8 +54,9 @@ const Resolved = resolve('init', ({ api: stateApi, dispatch }) => {
   if (stateApi.schema) return;
 
   return api.get('/schema').then(json => {
+    const schemas = map(filter(json, (i, k) => k !== 'definitions'), 'pluralName');
     dispatch(getApiSuccess(json));
-    dispatch(getCollectionsSuccess(Object.keys(json)));
+    dispatch(getCollectionsSuccess(schemas));
   });
 });
 
