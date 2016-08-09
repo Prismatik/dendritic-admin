@@ -1,10 +1,11 @@
-import { isEqual, isString, isUndefined, omit, reduce, toArray } from 'lodash';
+import { find, isEqual, isString, isUndefined, omit, reduce, toArray } from 'lodash';
 import React, { Component, createElement, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Action from '../components/action';
 import Creator from '../components/creator';
 import Table from '../components/table';
 import { extractHeaders } from '../lib/transformers/schema';
+import { getByPlural } from '../lib/schema';
 import { isUUID } from '../lib/validation';
 
 export class Collection extends Component {
@@ -48,9 +49,9 @@ export class Collection extends Component {
         schema
       }),
       createElement(Table, {
-        name: schema.name,
+        name: schema.pluralName,
         headers: extractHeaders(schema.properties),
-        iterator: Collection.iterator.bind(this, schema.name),
+        iterator: Collection.iterator.bind(this, schema.pluralName),
         data
       })
     );
@@ -69,7 +70,7 @@ Collection.defaultProps = {
 
 export function mapStateToProps(state, { params: { name } }) {
   return {
-    schema: state.api.schema[name],
+    schema: getByPlural(state.api.schema, name),
     apiUrl: state.api.url,
     data: Collection.sanitizeData(state.collections[name])
   };

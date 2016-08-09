@@ -1,9 +1,10 @@
 import { form2js } from 'form2js';
+import { map } from 'lodash';
 import React, { createElement, createFactory, PropTypes } from 'react';
+import FormInput from './form_input';
 import * as api from '../lib/api';
 import { handleNumbers } from '../lib/form2js';
 import { mapSchemaToFormInputs } from '../lib/transformers/schema';
-import Form from './form';
 
 module.exports = React.createClass({
   displayName: 'Creator',
@@ -43,19 +44,35 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    const inputs = mapSchemaToFormInputs(this.props.schema);
-    const form = this.state.creationFormVisible
-      ? createElement(Form, { inputs, onSubmit: this.submissionHandler })
-      : null;
+    const toggle = (
+      <button
+        onClick={this.toggleCreationForm}
+        className='waves-effect waves-light btn cyan'
+      >
+        {this.state.createButtonText}
+      </button>
+    );
 
-    return React.DOM.div(
-      { key: this.props.name+'creatorContainer' },
-      form,
-      React.DOM.button({
-        onClick: this.toggleCreationForm,
-        key: 'create',
-        className: 'waves-effect waves-light btn cyan'
-      }, this.state.createButtonText)
+    if (!this.state.creationFormVisible) return toggle;
+
+    return (
+      <div>
+        <form onSubmit={this.submissionHandler}>
+          {map(mapSchemaToFormInputs(this.props.schema), (item, key) =>
+            <FormInput
+              id={key}
+              name={key}
+              defaultValue={item.value}
+              type={item.type}
+              key={key}
+            />
+          )}
+          <button type='submit' className='waves-effect waves-light btn cyan'>
+            Submit
+          </button>
+        </form>
+        {toggle}
+      </div>
     );
   }
 });

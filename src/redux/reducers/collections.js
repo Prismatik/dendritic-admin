@@ -4,8 +4,7 @@ import { mapSchemaToData } from '../../lib/transformers/schema';
 
 export const collections = handleActions({
   'GET_COLLECTIONS_SUCCESS': (state, action) => {
-    const schemas = clean(action.payload);
-    return fromPairs(schemas.map(i => [i, {}]));
+    return fromPairs(action.payload.map(i => [i, {}]));
   },
   'ADD_TO_COLLECTION': (state, action) => {
     const { item, schema, collection, status } = action.payload;
@@ -39,7 +38,3 @@ export const collections = handleActions({
     };
   }
 }, {});
-
-function clean(schemas) {
-  return filter(schemas, item => item !== 'definitions');
-}

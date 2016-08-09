@@ -1,4 +1,4 @@
-import { flow } from 'lodash';
+import { filter, flow, map } from 'lodash';
 import React, { Component, createFactory, DOM, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { resolve } from 'react-resolver';
@@ -6,6 +6,7 @@ import header from '../components/header';
 import nav from '../components/nav';
 import listener from '../components/socket_listener';
 import * as api from '../lib/api';
+import { getByPlural } from '../lib/schema';
 import {
   getApiSuccess,
   updateApiChangefeedState
@@ -54,8 +55,9 @@ const Resolved = resolve('init', ({ api: stateApi, dispatch }) => {
   if (stateApi.schema) return;
 
   return api.get('/schema').then(json => {
+    const schemas = map(filter(json, (i, k) => k !== 'definitions'), 'pluralName');
     dispatch(getApiSuccess(json));
-    dispatch(getCollectionsSuccess(Object.keys(json)));
+    dispatch(getCollectionsSuccess(schemas));
   });
 });
 
@@ -78,8 +80,15 @@ function create(collection, host, getState, dispatch, data) {
   const { api } = getState();
 
   dispatch(addToCollection({
-    schema: api.schema[collection],
+    schema: getByPlural(api.schema, collection),
     status: api.changefeeds[host].state,
+    item: data,
+    collection
+  }));
+}
+
+function remove(collection, host, getState, dispatch, data) {
+  dispatch(removeFromCollection({
     item: data,
     collection
   }));
@@ -90,9 +99,9 @@ function stateEvent(collection, host, getState, dispatch, data) {
   dispatch(updateDocumentChangefeedState({ status: 'ready', collection }));
 }
 
-const SocketListener = listener(({ api: { url, schema }, collections }) => {
+const SocketListener = listener(({ api: { url }, collections }) => {
   return Object.keys(collections).map(collection => {
-    const host = `${url}/${schema[collection].pluralName}`;
+    const host = `${url}/${collection}`;
 
     return {
       host: host,
@@ -105,6 +114,9 @@ const SocketListener = listener(({ api: { url, schema }, collections }) => {
       }, {
         name: 'updated',
         handler: update.bind(null, collection, host)
+      }, {
+        name: 'deleted',
+        handler: remove.bind(null, collection, host)
       }, {
         name: 'all:loaded',
         handler: stateEvent.bind(null, collection, host)
