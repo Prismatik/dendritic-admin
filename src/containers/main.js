@@ -87,6 +87,13 @@ function create(collection, host, getState, dispatch, data) {
   }));
 }
 
+function remove(collection, host, getState, dispatch, data) {
+  dispatch(removeFromCollection({
+    item: data,
+    collection
+  }));
+}
+
 function stateEvent(collection, host, getState, dispatch, data) {
   dispatch(updateApiChangefeedState({ status: 'ready', host }));
   dispatch(updateDocumentChangefeedState({ status: 'ready', collection }));
@@ -107,6 +114,9 @@ const SocketListener = listener(({ api: { url }, collections }) => {
       }, {
         name: 'updated',
         handler: update.bind(null, collection, host)
+      }, {
+        name: 'deleted',
+        handler: remove.bind(null, collection, host)
       }, {
         name: 'all:loaded',
         handler: stateEvent.bind(null, collection, host)
