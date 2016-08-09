@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
-import Creator from 'root/src/components/creator';
-import Table from 'root/src/components/table';
-import { Collection, mapStateToProps } from 'root/src/containers/collection';
-import { extractHeaders } from 'root/src/lib/transformers/schema';
-import { shallowComponent } from 'root/test/react_utils';
-import ValidState from 'root/test/fixtures/valid_state';
+import Creator from '../../src/components/creator';
+import Table from '../../src/components/table';
+import { Collection, mapStateToProps } from '../../src/containers/collection';
+import { extractHeaders } from '../../src/lib/transformers/schema';
+import { shallowComponent } from '../react_utils';
+import ValidState from '../fixtures/valid_state';
 
 const state = ValidState();
 const { api: { url: apiUrl, schema } } = state;

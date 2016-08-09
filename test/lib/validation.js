@@ -1,4 +1,4 @@
-import { isUUID } from 'root/src/lib/validation';
+import { isUUID } from '../../src/lib/validation';
 
 describe('./lib/validation', function() {
   describe('.isUUID', function() {

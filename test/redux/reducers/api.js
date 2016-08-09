@@ -1,6 +1,6 @@
-import { api } from 'root/src/redux/reducers/api';
-import { ValidSchema } from 'root/test/fixtures/valid_schema';
-import ValidState, { url } from 'root/test/fixtures/valid_state';
+import { api } from '../../../src/redux/reducers/api';
+import { ValidSchema } from '../../fixtures/valid_schema';
+import ValidState, { url } from '../../fixtures/valid_state';
 
 describe('./redux/reducers/api', function() {
   describe('GET_API_SUCCESS', function() {

@@ -1,6 +1,7 @@
 import { form2js } from 'form2js';
 import React, { createElement, createFactory, PropTypes } from 'react';
 import * as api from '../lib/api';
+import { handleNumbers } from '../lib/form2js';
 import { mapSchemaToFormInputs } from '../lib/transformers/schema';
 import Form from './form';
 
@@ -29,7 +30,7 @@ module.exports = React.createClass({
 
   submissionHandler: function(e) {
     e.preventDefault();
-    const data = form2js(e.target, '.', true, this.handleNumbers);
+    const data = form2js(e.target, '.', true, handleNumbers);
 
     // FIXME check this data against the schema
     api.post(this.props.pluralName, data);

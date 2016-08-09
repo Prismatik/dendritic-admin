@@ -32,7 +32,7 @@ function createAsyncAction(type, handle) {
 
       return handle(payload)
         .then(response => dispatch({ type, payload, response }))
-        .catch(response => dispatch({ type: `${type}_FAILED`, payload, error: response.data }));
+        .catch(({ response }) => dispatch({ type: `${type}_FAILED`, payload, error: response.data }));
     };
   };
 }

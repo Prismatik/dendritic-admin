@@ -1,5 +1,5 @@
-import * as actions from 'root/src/redux/actions/collections';
-import { mockApi, mockStore } from 'root/test/mock_store';
+import * as actions from '../../../src/redux/actions/collections';
+import { mockApi, mockStore } from '../../mock_store';
 
 describe('./redux/actions/collections', function() {
   describe('.updateDocumentChangefeedState', function() {

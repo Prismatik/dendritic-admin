@@ -1,4 +1,4 @@
-import * as actions from 'root/src/redux/actions/api';
+import * as actions from '../../../src/redux/actions/api';
 
 describe('./redux/actions/api', function() {
   describe('.getApiSuccess', function() {

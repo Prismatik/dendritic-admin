@@ -1,4 +1,4 @@
-import * as api from 'root/src/lib/api';
+import * as api from '../../src/lib/api';
 import config from 'root/config';
 import nock from 'nock';
 
@@ -17,15 +17,13 @@ describe('./lib/api', () => {
       return api.get('/some/url').must.resolve.to.eql({ some: 'data' });
     });
 
-    it('handles cases when things don\'t go so well on the other end', done => {
+    it('handles cases when things don\'t go so well on the other end', () => {
       mock.get('/some/url').reply(404, { sorry: 'mate' });
-      api.get('/some/url')
-        .then(data => done(`Call must reject, instead got: ${data}`))
+      return api.get('/some/url')
         .catch(error => {
-          error.status.must.eql(404);
-          error.data.must.eql({ sorry: 'mate' });
-        })
-        .then(done).catch(done);
+          error.response.status.must.eql(404);
+          error.response.data.must.eql({ sorry: 'mate' });
+        });
     });
   });
 
@@ -35,15 +33,13 @@ describe('./lib/api', () => {
       return api.post('/some/url', { some: 'data' }).must.resolve.to.eql({ ok: true });
     });
 
-    it('recovers from the other side failures', done => {
+    it('recovers from the other side failures', () => {
       mock.post('/some/url', { some: 'data' }).reply(422, { validation: 'failed' });
-      api.post('/some/url', { some: 'data' })
-        .then(data => done(`Call must reject, instead got: ${data}`))
+      return api.post('/some/url', { some: 'data' })
         .catch(error => {
-          error.status.must.eql(422);
-          error.data.must.eql({ validation: 'failed' });
-        })
-        .then(done).catch(done);
+          error.response.status.must.eql(422);
+          error.response.data.must.eql({ validation: 'failed' });
+        });
     });
   });
 
@@ -53,15 +49,13 @@ describe('./lib/api', () => {
       return api.put('/some/url', { some: 'data' }).must.resolve.to.eql({ ok: true });
     });
 
-    it('recovers from the other side failures', done => {
+    it('recovers from the other side failures', () => {
       mock.put('/some/url', { some: 'data' }).reply(422, { validation: 'failed' });
-      api.put('/some/url', { some: 'data' })
-        .then(data => done(`Call must reject, instead got: ${data}`))
+      return api.put('/some/url', { some: 'data' })
         .catch(error => {
-          error.status.must.eql(422);
-          error.data.must.eql({ validation: 'failed' });
-        })
-        .then(done).catch(done);
+          error.response.status.must.eql(422);
+          error.response.data.must.eql({ validation: 'failed' });
+        });
     });
   });
 
@@ -72,15 +66,13 @@ describe('./lib/api', () => {
       return api.delete('/some/url').must.resolve.to.eql({ ok: true });
     });
 
-    it('handles cases when things don\'t go so well on the other end', done => {
+    it('handles cases when things don\'t go so well on the other end', () => {
       mock.delete('/some/url').reply(404, { sorry: 'mate' });
-      api.delete('/some/url')
-        .then(data => done(`Call must reject, instead got: ${data}`))
+      return api.delete('/some/url')
         .catch(error => {
-          error.status.must.eql(404);
-          error.data.must.eql({ sorry: 'mate' });
-        })
-        .then(done).catch(done);
+          error.response.status.must.eql(404);
+          error.response.data.must.eql({ sorry: 'mate' });
+        });
     });
   });
 });

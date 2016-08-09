@@ -1,6 +1,6 @@
 import React from 'react';
-import TableColumn from 'root/src/components/table_column';
-import { shallowComponent } from 'root/test/react_utils';
+import TableColumn from '../../src/components/table_column';
+import { shallowComponent } from '../react_utils';
 
 describe('./components/table_column', function() {
   describe('.render', function() {

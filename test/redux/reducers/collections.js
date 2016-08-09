@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
-import { collections } from 'root/src/redux/reducers/collections';
-import { ValidSchema } from 'root/test/fixtures/valid_schema';
+import { collections } from '../../../src/redux/reducers/collections';
+import { ValidSchema } from '../../fixtures/valid_schema';
 
 const initialState = {
   sheep: {

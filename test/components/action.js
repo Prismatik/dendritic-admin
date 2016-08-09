@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
-import Action from 'root/src/components/action';
-import { shallowComponent } from 'root/test/react_utils';
+import Action from '../../src/components/action';
+import { shallowComponent } from '../react_utils';
 
 describe('./components/action', function() {
   describe('.render', function() {

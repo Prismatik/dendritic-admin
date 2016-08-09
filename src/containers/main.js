@@ -59,29 +59,35 @@ const Resolved = resolve('init', ({ api: stateApi, dispatch }) => {
   });
 });
 
-function recordEvent(collection, host, getState, dispatch, data) {
+function update(collection, host, getState, dispatch, data) {
   const { api } = getState();
-  const item = data.new_val;
 
-  if (data.old_val) {
-    dispatch(removeFromCollection({ item, collection }));
-  }
+  dispatch(removeFromCollection({
+    item: data,
+    collection
+  }));
+  dispatch(addToCollection({
+    schema: api.schema[collection],
+    status: api.changefeeds[host].state,
+    item: data,
+    collection
+  }));
+}
 
-  if (data.new_val) {
-    dispatch(addToCollection({
-      schema: api.schema[collection],
-      status: api.changefeeds[host].state,
-      item,
-      collection
-    }));
-  }
+function create(collection, host, getState, dispatch, data) {
+  const { api } = getState();
+
+  dispatch(addToCollection({
+    schema: api.schema[collection],
+    status: api.changefeeds[host].state,
+    item: data,
+    collection
+  }));
 }
 
 function stateEvent(collection, host, getState, dispatch, data) {
-  if (data.state === 'ready') {
-    dispatch(updateApiChangefeedState({ status: data.state, host }));
-    dispatch(updateDocumentChangefeedState({ status: data.state, collection }));
-  }
+  dispatch(updateApiChangefeedState({ status: 'ready', host }));
+  dispatch(updateDocumentChangefeedState({ status: 'ready', collection }));
 }
 
 const SocketListener = listener(({ api: { url, schema }, collections }) => {
@@ -91,10 +97,16 @@ const SocketListener = listener(({ api: { url, schema }, collections }) => {
     return {
       host: host,
       events: [{
-        name: 'record',
-        handler: recordEvent.bind(null, collection, host)
+        name: 'existed',
+        handler: create.bind(null, collection, host)
       }, {
-        name: 'state',
+        name: 'created',
+        handler: create.bind(null, collection, host)
+      }, {
+        name: 'updated',
+        handler: update.bind(null, collection, host)
+      }, {
+        name: 'all:loaded',
         handler: stateEvent.bind(null, collection, host)
       }]
     };
